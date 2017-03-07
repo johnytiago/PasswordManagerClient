@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 
+
 /**
  * <p>Java class for helloWorld complex type.
  * 
@@ -56,5 +57,6 @@ public class HelloWorld {
     public void setArg0(String value) {
         this.arg0 = value;
     }
+
 
 }
