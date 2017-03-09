@@ -1,4 +1,4 @@
-package ws.client;
+package terminal;
 
 import java.util.Scanner;
 
@@ -6,7 +6,7 @@ import ws.PasswordManagerWS;
 import ws.PasswordManagerWSImplService;  
   	
 
-public class PasswordManagerWSClient {
+public class ClientTerminal {
 	public static void main(String[] args) {  
 		final String INIT_COMMAND = "init";
 		final String REG_COMMAND = "register";
