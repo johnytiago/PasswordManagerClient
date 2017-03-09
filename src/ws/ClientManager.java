@@ -42,18 +42,7 @@ public class ClientManager{
        
                
     }
-    /*
-    public void savePublicKey(PublicKey pub){
-		try{
-		byte[] pubEnc = pub.getEncoded();
-		FileOutputStream fos = new FileOutputStream("." + "/public.key");
-		fos.write(pubEnc);
-		fos.close();
-		}
-		catch(Exception e){}
-    }
 
-*/
 
 
 
@@ -85,19 +74,7 @@ public class ClientManager{
 		      new KeyPair(publicKey, (PrivateKey) key);
     	}
     	}catch(Exception e){}
- /*
-		ks.load(null,password);
- 		
 
-    	//Create a new file to store the KeyStore object
-		java.io.FileOutputStream fos = new;
-		java.io.FileOutputStream("keystorefile.jce");
-
-		//Write the KeyStore into the file
-		ks.store(fos, "Keys".toCharArray());
-		//Close the file stream
-		fos.close(); 
-		*/
     }
 
  	
