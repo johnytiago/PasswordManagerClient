@@ -13,8 +13,10 @@ import java.security.*;
 import java.security.spec.X509EncodedKeySpec;
 import java.io.*;
 import java.util.*;
-import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 
 public class ClientManager{
 
@@ -34,41 +36,39 @@ public class ClientManager{
         KeyPair pair = kgen.generateKeyPair();
         
         saveKeypair(pair,pass);
-        //PublicKey pub = pair.getPublic();
-        //savePublicKey(pub);
+
+
         }
         catch(Exception e){}  
-
-       
-               
+          
     }
-
-
-
-
 
 
     public void saveKeypair(KeyPair pair, char [] password){
     	
     	try{
-    		KeyStore keystore = openKeystore("password".toCharArray());
+    		KeyStore keystore = openKeystore(password);
+    		//###############################################################
+			X509Certificate [] cert = GenCert.generateCertificate(pair);
+	
 
+    		//###################################################
     		//PrivateKey priv = pair.getPrivate();
+    		
 
-    	   
-		    
 
 		    String ali = "mykeypair";
 
 		    Key key = keystore.getKey(ali, password);
-			keystore.setCertificateEntry(ali, cert);
+			keystore.setCertificateEntry(ali, cert[0]);
+
     	 if ( key instanceof PrivateKey) {
 
 		      // Get certificate of public key
-		      Certificate cert = keystore.getCertificate(ali);
+		      Certificate certificate = keystore.getCertificate(ali);
 
 		      // Get public key
-		      PublicKey publicKey = cert.getPublicKey();
+		      PublicKey publicKey = cert[0].getPublicKey();
 
 		      // Return a key pair
 		      new KeyPair(publicKey, (PrivateKey) key);
@@ -120,6 +120,16 @@ public class ClientManager{
 		}catch(Exception e){}	
 		return null;
 		}
+
+
+
+
+	public void save_password(byte[] domain, byte[] username, byte[] password){}
+	public byte[] retrieve_password(byte[] domain, byte[] username) { 
+		byte [] password=null;
+		return password;
+	}
+
 
 }
 
