@@ -79,33 +79,6 @@ public class ClientManager{
 
  	
 
-
-/*
-    public Key getPublic(){
-    	Key pubKey = null;
-    	try{
-        
-    	File f = new File("public.key");
-	    FileInputStream fis = new FileInputStream(f);
-	    DataInputStream dis = new DataInputStream(fis);
-	    byte[] keyBytes = new byte[(int)f.length()];
-	    dis.readFully(keyBytes);
-	    dis.close();
-
-	    X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-	    //there can be a bug because When I'm saving the key I don't put it in this mode
-
-	    KeyFactory kf = KeyFactory.getInstance("RSA");
-	    pubKey = kf.generatePublic(spec);
-	    return pubKey;
-		}
-		catch(Exception e){
-
-		}
-		return pubKey;
-    
-	}*/
-
 	public void createKeystore(char [] keystorePassword){
 		try{
 		// Create an instance of KeyStore of type “JCEKS”.
