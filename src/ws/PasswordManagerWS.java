@@ -3,7 +3,6 @@ package ws;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
@@ -26,17 +25,53 @@ public interface PasswordManagerWS {
 
     /**
      * 
+     * @param arg2
+     * @param arg1
      * @param arg0
-     * @return
-     *     returns java.lang.String
      */
     @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "helloWorld", targetNamespace = "http://ws/", className = "ws.HelloWorld")
-    @ResponseWrapper(localName = "helloWorldResponse", targetNamespace = "http://ws/", className = "ws.HelloWorldResponse")
-    @Action(input = "http://ws/PasswordManagerWS/helloWorldRequest", output = "http://ws/PasswordManagerWS/helloWorldResponse")
-    public String helloWorld(
+    @RequestWrapper(localName = "get", targetNamespace = "http://ws/", className = "ws.Get")
+    @ResponseWrapper(localName = "getResponse", targetNamespace = "http://ws/", className = "ws.GetResponse")
+    @Action(input = "http://ws/PasswordManagerWS/getRequest", output = "http://ws/PasswordManagerWS/getResponse")
+    public void get(
         @WebParam(name = "arg0", targetNamespace = "")
-        String arg0);
+        byte[] arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        byte[] arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        byte[] arg2);
+
+    /**
+     * 
+     * @param arg3
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "put", targetNamespace = "http://ws/", className = "ws.Put")
+    @ResponseWrapper(localName = "putResponse", targetNamespace = "http://ws/", className = "ws.PutResponse")
+    @Action(input = "http://ws/PasswordManagerWS/putRequest", output = "http://ws/PasswordManagerWS/putResponse")
+    public void put(
+        @WebParam(name = "arg0", targetNamespace = "")
+        byte[] arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        byte[] arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        byte[] arg2,
+        @WebParam(name = "arg3", targetNamespace = "")
+        byte[] arg3);
+
+    /**
+     * 
+     * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "register", targetNamespace = "http://ws/", className = "ws.Register")
+    @ResponseWrapper(localName = "registerResponse", targetNamespace = "http://ws/", className = "ws.RegisterResponse")
+    @Action(input = "http://ws/PasswordManagerWS/registerRequest", output = "http://ws/PasswordManagerWS/registerResponse")
+    public void register(
+        @WebParam(name = "arg0", targetNamespace = "")
+        byte[] arg0);
 
 }

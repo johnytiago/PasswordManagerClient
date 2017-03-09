@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "PasswordManagerWSImplService", targetNamespace = "http://ws/", wsdlLocation = "http://localhost:8080/WS/HelloWorld?wsdl")
+@WebServiceClient(name = "PasswordManagerWSImplService", targetNamespace = "http://ws/", wsdlLocation = "http://localhost:8080/WS/PasswordManager?wsdl")
 public class PasswordManagerWSImplService
     extends Service
 {
@@ -30,7 +30,7 @@ public class PasswordManagerWSImplService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://localhost:8080/WS/HelloWorld?wsdl");
+            url = new URL("http://localhost:8080/WS/PasswordManager?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
