@@ -2,12 +2,14 @@ package terminal;
 
 import java.util.Scanner;
 
+import manager.ClientManager;
 import ws.PasswordManagerWS;
 import ws.PasswordManagerWSImplService;  
   	
 
 public class ClientTerminal {
 	public static void main(String[] args) {  
+		
 		final String INIT_COMMAND = "init";
 		final String REG_COMMAND = "register";
 		final String PASS_COMMAND = "passwd";
@@ -15,6 +17,8 @@ public class ClientTerminal {
 		
 		PasswordManagerWSImplService passwordManagerWSImplService = new PasswordManagerWSImplService();  
 		PasswordManagerWS passwordManagerWS = passwordManagerWSImplService.getPasswordManagerWSImplPort();  
+		
+		ClientManager _clientManager = new ClientManager(passwordManagerWS);
 		
 		System.out.println("Available commands are:");
 		System.out.println("	" + INIT_COMMAND);
@@ -28,7 +32,13 @@ public class ClientTerminal {
 		while(!reader.nextLine().equals(CLOSE_COMMAND)){
 			switch(reader.nextLine()){
 				case INIT_COMMAND:
-					passwordManagerWS.register(null);
+					String username,password;
+					System.out.println("username: ");
+					username = reader.nextLine();
+					System.out.println("password: ");
+					password = reader.nextLine();
+					
+					_clientManager.init(username, password);
 					break;
 				case REG_COMMAND:
 					break;
