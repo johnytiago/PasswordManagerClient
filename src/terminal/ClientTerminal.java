@@ -30,9 +30,9 @@ public class ClientTerminal {
 		
 		Scanner reader = new Scanner(System.in);
 		while(!reader.nextLine().equals(CLOSE_COMMAND)){
+			String username,password;
 			switch(reader.nextLine()){
 				case INIT_COMMAND:
-					String username,password;
 					System.out.println("username: ");
 					username = reader.nextLine();
 					System.out.println("password: ");
@@ -41,9 +41,17 @@ public class ClientTerminal {
 					_clientManager.init(username, password);
 					break;
 				case REG_COMMAND:
+					System.out.println("password: ");
+					password = reader.nextLine();
+					
+					_clientManager.register_user(password);					
 					break;
 				case PASS_COMMAND:
-					break;				
+					break;		
+				default:
+					username = "";
+					password = "";
+					break;
 			}
 		}
 		
