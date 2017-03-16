@@ -39,13 +39,20 @@ public class ClientManager{
 	        KeyPair pair = kgen.generateKeyPair();
 	        
 	        saveKeypair(pair, password.toCharArray());
+	        PublicKey pub = pair.getPublic();
+	        sendPubKey(pub);
 
         }
         catch(Exception e){
         	
         }    
     }
-    
+    //This method will be used to send the Server the client PubKey
+    public void sendPubKey(PublicKey pub){
+    	
+    	
+    	
+    }
 	public void save_password(byte[] domain, byte[] username, byte[] password){
 		
 	}
@@ -62,12 +69,9 @@ public class ClientManager{
     		//###############################################################
 			X509Certificate [] cert = GenCert.generateCertificate(pair);
 	
-
     		//###################################################
-    		//PrivateKey priv = pair.getPrivate();
     		
-
-
+    		
 		    //String ali = "mykeypair";
 
 		    Key key = keystore.getKey(getUsername(), password);
@@ -97,8 +101,6 @@ public class ClientManager{
 			 // Load the null Keystore and set the password to keyStorepassword
 			 ks.load(null, keystorePassword); 
 			 /*
-			 //add password protectio to keystore
-				KeyStore.PasswordProtection password;
 			password = new KeyStore.PasswordProtection(keystorePassword); 
 			*/
 			//Create a new file to store the KeyStore object
