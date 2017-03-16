@@ -10,15 +10,15 @@ import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 
-import ws.PasswordManagerWS;
+import ws.PasswordManagerWSClient;
 					
 public class ClientManager{
 
-	private PasswordManagerWS _passwordManagerWS;
+	private PasswordManagerWSClient _clientAPI;
 	private String _username;
 	
-	public ClientManager(PasswordManagerWS WS){
-		_passwordManagerWS = WS;
+	public ClientManager(){
+		_clientAPI = new PasswordManagerWSClient();
 	}
 	
 	public String getUsername() {

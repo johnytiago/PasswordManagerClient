@@ -3,8 +3,6 @@ package terminal;
 import java.util.Scanner;
 
 import manager.ClientManager;
-import ws.PasswordManagerWS;
-import ws.PasswordManagerWSImplService;  
   	
 
 public class ClientTerminal {
@@ -15,10 +13,8 @@ public class ClientTerminal {
 		final String PASS_COMMAND = "passwd";
 		final String CLOSE_COMMAND = "close";
 		
-		PasswordManagerWSImplService passwordManagerWSImplService = new PasswordManagerWSImplService();  
-		PasswordManagerWS passwordManagerWS = passwordManagerWSImplService.getPasswordManagerWSImplPort();  
 		
-		ClientManager _clientManager = new ClientManager(passwordManagerWS);
+		ClientManager _clientManager = new ClientManager();
 		
 		System.out.println("Available commands are:");
 		System.out.println("	" + INIT_COMMAND);

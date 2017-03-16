@@ -10,6 +10,10 @@ public class PasswordManagerWSClient {
   public static void main(String[] args) {
 	  connect();
   }
+
+  public PasswordManagerWSClient() {
+    connect();
+  }
   
   public static void connect() {
 	  PasswordManagerWSImplService pmWSImplService = new PasswordManagerWSImplService();
