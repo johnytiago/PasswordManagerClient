@@ -1,6 +1,7 @@
 package manager;
 
 import java.io.FileInputStream;
+import java.util.Scanner;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -9,6 +10,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.*;
+import javax.crypto.Cipher;
 
 import ws.PasswordManagerWSClient;
 					
@@ -26,12 +29,19 @@ public class ClientManager{
 	}
 	
 	
+	
+	
 	public void init(String username, String password){
 		_username = username;
 		createKeystore(getUsername(), password.toCharArray());
+		register_keys(password);
+		
+	}
+	public void register_user(){
+
 	}
 
-    public void register_user(String password){
+    public void register_keys(String password){
     	
         try{
 	        KeyPairGenerator kgen = KeyPairGenerator.getInstance("RSA");
@@ -40,21 +50,46 @@ public class ClientManager{
 	        
 	        saveKeypair(pair, password.toCharArray());
 	        PublicKey pub = pair.getPublic();
-	        sendPubKey(pub);
+	        
 
         }
         catch(Exception e){
         	
         }    
     }
-    //This method will be used to send the Server the client PubKey
-    public void sendPubKey(PublicKey pub){
-    	
-    	
-    	
-    }
 	public void save_password(byte[] domain, byte[] username, byte[] password){
-		
+		try{
+			String pass = Arrays.toString(password);;
+
+			KeyStore keystore = openKeystore(getUsername(),pass.toCharArray());
+			
+			Key key = keystore.getKey(getUsername(), "password".toCharArray());
+			
+			if (key instanceof PrivateKey) {
+			      // Get certificate of public key
+					Certificate cert = keystore.getCertificate(getUsername());
+
+			      // Get public key
+			      PublicKey publicKey = cert.getPublicKey();
+
+			      // Return a key pair
+			      new KeyPair(publicKey, (PrivateKey) key);
+			
+				// Initialize cipher object
+				Cipher aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+				aesCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+				// Encrypt the cleartext
+				byte[] passwordCif = aesCipher.doFinal(password);
+				byte[] domainCif = aesCipher.doFinal(domain);
+				byte[] usernameCif = aesCipher.doFinal(username); 
+				//missing the send part that as {Pub,domainCif,usernameCif,passwordCif}
+			 }
+			
+		}
+		catch(Exception e){
+			
+		}
 	}
 	
 	public String retrieve_password(byte[] domain, byte[] username) { 

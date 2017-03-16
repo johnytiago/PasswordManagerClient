@@ -40,7 +40,7 @@ public class ClientTerminal {
 					System.out.println("password: ");
 					password = reader.nextLine();
 					
-					_clientManager.register_user(password);					
+					_clientManager.register_user();					
 					break;
 				case PASS_COMMAND:
 					break;		
@@ -51,7 +51,7 @@ public class ClientTerminal {
 			}
 		}
 		
-		passwordManagerWS = null;
+		//passwordManagerWS = null;
 		reader.close();
 		System.out.println("goodbye!");
 		return;
