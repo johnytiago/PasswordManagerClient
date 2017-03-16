@@ -1,7 +1,6 @@
 package manager;
 
 import java.io.FileInputStream;
-import java.util.Scanner;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
