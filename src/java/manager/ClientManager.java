@@ -11,6 +11,7 @@ import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.*;
 import javax.crypto.Cipher;
+import java.io.File;
 
 import ws.PasswordManagerWSClient;
 					
@@ -18,6 +19,7 @@ public class ClientManager{
 
 	private PasswordManagerWSClient _clientAPI;
 	private String _username;
+	private KeyStore keystore_Global;
 	
 	public ClientManager(){
 		_clientAPI = new PasswordManagerWSClient();
@@ -28,11 +30,16 @@ public class ClientManager{
 	}
 	
 	
-	
+	public byte[] retrieve_password(byte[] domain, byte[] username){
+		byte[] password= username;
+		byte[] domainCif= encript(domain);
+		byte[] usernameCif= encript(domain);
+		//missing shananigans to get it from WS
+		return password;
+	}
 	
 	public void init(String username, String password){
 		_username = username;
-		createKeystore(getUsername(), password.toCharArray());
 		register_keys(password);
 		
 	}
@@ -56,11 +63,11 @@ public class ClientManager{
         	
         }    
     }
-	public void save_password(byte[] domain, byte[] username, byte[] password){
-		try{
-			String pass = Arrays.toString(password);;
+    public byte[] encript(byte[] cleartext){
+    	try{
 
-			KeyStore keystore = openKeystore(getUsername(),pass.toCharArray());
+
+			KeyStore keystore = keystore_Global;
 			
 			Key key = keystore.getKey(getUsername(), "password".toCharArray());
 			
@@ -79,27 +86,31 @@ public class ClientManager{
 				aesCipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
 				// Encrypt the cleartext
-				byte[] passwordCif = aesCipher.doFinal(password);
-				byte[] domainCif = aesCipher.doFinal(domain);
-				byte[] usernameCif = aesCipher.doFinal(username); 
+				byte[] encripted = aesCipher.doFinal(cleartext);
+				return encripted;
+				}
+    	}catch(Exception e){
+    		
+    	}
+    	return cleartext;
+    	
+    }
+	public void save_password(byte[] domain, byte[] username, byte[] password){
+		
+				byte[] passwordCif =encript(password);
+				byte[] domainCif = encript(domain);
+				byte[] usernameCif = encript(username); 
 				//missing the send part that as {Pub,domainCif,usernameCif,passwordCif}
-			 }
-			
-		}
-		catch(Exception e){
-			
-		}
-	}
-	
-	public String retrieve_password(byte[] domain, byte[] username) { 
-		return "";
+
 	}
 
 
     private void saveKeypair(KeyPair pair, char[] password){
     	
     	try{
-    		KeyStore keystore = openKeystore(getUsername(), password);
+    		
+    		createKeystore(getUsername(), password);
+    		KeyStore keystore = keystore_Global; 
     		//###############################################################
 			X509Certificate [] cert = GenCert.generateCertificate(pair);
 	
@@ -129,6 +140,9 @@ public class ClientManager{
 
 	private void createKeystore(String keystoreName, char[] keystorePassword){
 		try{
+			File f = new File("./"+getUsername()+".jce");
+			if(!f.exists()){
+		   
 			// Create an instance of KeyStore of type “JCEKS”.
 			 // JCEKS refers the KeyStore implementation from SunJCE provider
 			KeyStore ks = KeyStore.getInstance("JCEKS");
@@ -144,7 +158,13 @@ public class ClientManager{
 			ks.store(fos, keystorePassword);
 			//Close the file stream
 			fos.close(); 
-
+			keystore_Global=ks;
+			System.out.println("success");
+			}
+			else{
+				openKeystore(getUsername(),keystorePassword);
+		    System.out.println("fail");
+			}
 		}catch(Exception e){
 			
 		}
@@ -163,6 +183,7 @@ public class ClientManager{
 			
 			//String alias=args[0];
 			//Key k = ks.getKey(alias, "changeme".toCharArray()); 
+			keystore_Global=ks;
 			return ks;
 		
 		}catch(Exception e){
