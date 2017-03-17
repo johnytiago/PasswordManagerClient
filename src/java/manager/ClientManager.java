@@ -9,6 +9,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.crypto.Cipher;
 import java.io.File;
@@ -34,6 +35,10 @@ public class ClientManager{
 		byte[] password= username;
 		byte[] domainCif= encript(domain);
 		byte[] usernameCif= encript(domain);
+		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		byte[] stampCif = encript(timeStamp.getBytes());
+		
+
 		//missing shananigans to get it from WS
 		return password;
 	}
