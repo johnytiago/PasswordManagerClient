@@ -30,10 +30,11 @@ public class ObjectFactory {
     private final static QName _Get_QNAME = new QName("http://ws/", "get");
     private final static QName _Put_QNAME = new QName("http://ws/", "put");
     private final static QName _Register_QNAME = new QName("http://ws/", "register");
-    private final static QName _GetArg2_QNAME = new QName("", "arg2");
-    private final static QName _GetArg1_QNAME = new QName("", "arg1");
-    private final static QName _GetArg0_QNAME = new QName("", "arg0");
     private final static QName _PutArg3_QNAME = new QName("", "arg3");
+    private final static QName _PutArg2_QNAME = new QName("", "arg2");
+    private final static QName _PutArg1_QNAME = new QName("", "arg1");
+    private final static QName _PutArg0_QNAME = new QName("", "arg0");
+    private final static QName _GetResponseReturn_QNAME = new QName("", "return");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ws
@@ -148,42 +149,6 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "arg2", scope = Get.class)
-    public JAXBElement<byte[]> createGetArg2(byte[] value) {
-        return new JAXBElement<byte[]>(_GetArg2_QNAME, byte[].class, Get.class, ((byte[]) value));
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "arg1", scope = Get.class)
-    public JAXBElement<byte[]> createGetArg1(byte[] value) {
-        return new JAXBElement<byte[]>(_GetArg1_QNAME, byte[].class, Get.class, ((byte[]) value));
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "arg0", scope = Get.class)
-    public JAXBElement<byte[]> createGetArg0(byte[] value) {
-        return new JAXBElement<byte[]>(_GetArg0_QNAME, byte[].class, Get.class, ((byte[]) value));
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "arg0", scope = Register.class)
-    public JAXBElement<byte[]> createRegisterArg0(byte[] value) {
-        return new JAXBElement<byte[]>(_GetArg0_QNAME, byte[].class, Register.class, ((byte[]) value));
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
     @XmlElementDecl(namespace = "", name = "arg3", scope = Put.class)
     public JAXBElement<byte[]> createPutArg3(byte[] value) {
         return new JAXBElement<byte[]>(_PutArg3_QNAME, byte[].class, Put.class, ((byte[]) value));
@@ -195,7 +160,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "arg2", scope = Put.class)
     public JAXBElement<byte[]> createPutArg2(byte[] value) {
-        return new JAXBElement<byte[]>(_GetArg2_QNAME, byte[].class, Put.class, ((byte[]) value));
+        return new JAXBElement<byte[]>(_PutArg2_QNAME, byte[].class, Put.class, ((byte[]) value));
     }
 
     /**
@@ -204,7 +169,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "arg1", scope = Put.class)
     public JAXBElement<byte[]> createPutArg1(byte[] value) {
-        return new JAXBElement<byte[]>(_GetArg1_QNAME, byte[].class, Put.class, ((byte[]) value));
+        return new JAXBElement<byte[]>(_PutArg1_QNAME, byte[].class, Put.class, ((byte[]) value));
     }
 
     /**
@@ -213,7 +178,52 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "arg0", scope = Put.class)
     public JAXBElement<byte[]> createPutArg0(byte[] value) {
-        return new JAXBElement<byte[]>(_GetArg0_QNAME, byte[].class, Put.class, ((byte[]) value));
+        return new JAXBElement<byte[]>(_PutArg0_QNAME, byte[].class, Put.class, ((byte[]) value));
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "arg2", scope = Get.class)
+    public JAXBElement<byte[]> createGetArg2(byte[] value) {
+        return new JAXBElement<byte[]>(_PutArg2_QNAME, byte[].class, Get.class, ((byte[]) value));
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "arg1", scope = Get.class)
+    public JAXBElement<byte[]> createGetArg1(byte[] value) {
+        return new JAXBElement<byte[]>(_PutArg1_QNAME, byte[].class, Get.class, ((byte[]) value));
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "arg0", scope = Get.class)
+    public JAXBElement<byte[]> createGetArg0(byte[] value) {
+        return new JAXBElement<byte[]>(_PutArg0_QNAME, byte[].class, Get.class, ((byte[]) value));
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "arg0", scope = Register.class)
+    public JAXBElement<byte[]> createRegisterArg0(byte[] value) {
+        return new JAXBElement<byte[]>(_PutArg0_QNAME, byte[].class, Register.class, ((byte[]) value));
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "return", scope = GetResponse.class)
+    public JAXBElement<byte[]> createGetResponseReturn(byte[] value) {
+        return new JAXBElement<byte[]>(_GetResponseReturn_QNAME, byte[].class, GetResponse.class, ((byte[]) value));
     }
 
 }

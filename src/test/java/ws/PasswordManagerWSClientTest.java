@@ -35,8 +35,8 @@ public class PasswordManagerWSClientTest {
 
 	@Test
 	public void test_3_getWhileEmpty() {
-		String res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "username".getBytes());
-		assertEquals(message.PasswordManagerMessages.PASSWORD_NOT_FOUND, res);
+		byte[] res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "username".getBytes());
+		assertEquals(message.PasswordManagerMessages.PASSWORD_NOT_FOUND.getBytes(), res);
 	}
 
 	@Test
@@ -59,24 +59,24 @@ public class PasswordManagerWSClientTest {
 	
 	@Test
 	public void test_7_getNotRegistered() {
-		String res = _clientAPI.get("NotRegisterUser".getBytes(), "trash".getBytes(), "trash".getBytes());
-		assertEquals(message.PasswordManagerMessages.PUBKEY_NOT_FOUND, res);
+		byte[] res = _clientAPI.get("NotRegisterUser".getBytes(), "trash".getBytes(), "trash".getBytes());
+		assertEquals(message.PasswordManagerMessages.PUBKEY_NOT_FOUND.getBytes(), res);
 	}
 
 	@Test
 	public void test_7_getWrongDomain() {
-		String res = _clientAPI.get("pubKey".getBytes(), "wrongDomain".getBytes(), "username".getBytes());
-		assertEquals(message.PasswordManagerMessages.PASSWORD_NOT_FOUND, res);
+		byte[] res = _clientAPI.get("pubKey".getBytes(), "wrongDomain".getBytes(), "username".getBytes());
+		assertEquals(message.PasswordManagerMessages.PASSWORD_NOT_FOUND.getBytes(), res);
 	}
 	@Test
 	public void test_7_getWrongUsername() {
-		String res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "wrongUsername".getBytes());
-		assertEquals(message.PasswordManagerMessages.PASSWORD_NOT_FOUND, res);
+		byte[] res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "wrongUsername".getBytes());
+		assertEquals(message.PasswordManagerMessages.PASSWORD_NOT_FOUND.getBytes(), res);
 	}
 
 	@Test
 	public void test_8_getPasswordSuccess() {
-		String res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "username".getBytes());
-		assertEquals("password", res);
+		byte[] res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "username".getBytes());
+		assertEquals("password".getBytes(), res);
 	}
 }

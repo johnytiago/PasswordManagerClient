@@ -6,13 +6,11 @@ import ws.PasswordManagerWSImplService;
 public class PasswordManagerWSClient {
 
   private static PasswordManagerWS _passwordmanagerWS;
-  
-  public static void main(String[] args) {
-	  connect();
-  }
+
 
   public PasswordManagerWSClient() {
-    connect();
+	  connect();
+   
   }
   
   public static void connect() {
@@ -23,7 +21,7 @@ public class PasswordManagerWSClient {
 	  System.out.println("Found service running at: " + pmWSImplService.getWSDLDocumentLocation().toString());
   }
   
-  public String get(byte[] pubKey, byte[] domain, byte[] username) {
+  public byte[] get(byte[] pubKey, byte[] domain, byte[] username) {
 	  return _passwordmanagerWS.get(pubKey, domain, username);
 	  // check if res equals error ?
   }

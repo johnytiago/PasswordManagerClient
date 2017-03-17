@@ -30,14 +30,14 @@ public interface PasswordManagerWS {
      * @param arg1
      * @param arg0
      * @return
-     *     returns java.lang.String
+     *     returns byte[]
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "get", targetNamespace = "http://ws/", className = "ws.Get")
     @ResponseWrapper(localName = "getResponse", targetNamespace = "http://ws/", className = "ws.GetResponse")
     @Action(input = "http://ws/PasswordManagerWS/getRequest", output = "http://ws/PasswordManagerWS/getResponse")
-    public String get(
+    public byte[] get(
         @WebParam(name = "arg0", targetNamespace = "")
         byte[] arg0,
         @WebParam(name = "arg1", targetNamespace = "")
