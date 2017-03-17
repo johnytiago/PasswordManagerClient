@@ -25,31 +25,31 @@ public class ClientTerminal {
 		System.out.print(">");
 		
 		Scanner reader = new Scanner(System.in);
-		while(!reader.nextLine().equals(CLOSE_COMMAND)){
-			String username,password;
-			switch(reader.nextLine()){
-				case INIT_COMMAND:
-					System.out.println("username: ");
-					username = reader.nextLine();
-					System.out.println("password: ");
-					password = reader.nextLine();
+		//while(!reader.nextLine().equals(CLOSE_COMMAND)){
+			//String username,password;
+			//switch(reader.nextLine()){
+				//case INIT_COMMAND:
+					//System.out.println("username: ");
+					//username = reader.nextLine();
+					//System.out.println("password: ");
+					//password = reader.nextLine();
 					
-					_clientManager.init(username, password);
-					break;
-				case REG_COMMAND:
-					System.out.println("password: ");
-					password = reader.nextLine();
+					//_clientManager.init(username, password);
+					//break;
+				//case REG_COMMAND:
+					//System.out.println("password: ");
+					//password = reader.nextLine();
 					
-					_clientManager.register_user();					
-					break;
-				case PASS_COMMAND:
-					break;		
-				default:
-					username = "";
-					password = "";
-					break;
-			}
-		}
+					//_clientManager.register_user();					
+					//break;
+				//case PASS_COMMAND:
+					//break;		
+				//default:
+					//username = "";
+					//password = "";
+					//break;
+			//}
+		//}
 		
 		//passwordManagerWS = null;
 		reader.close();
