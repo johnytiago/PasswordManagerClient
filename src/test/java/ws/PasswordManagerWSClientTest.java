@@ -18,7 +18,6 @@ public class PasswordManagerWSClientTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		_clientAPI = new PasswordManagerWSClient();
-		PasswordManagerWSClient.connect();
 	}
 
 	@Test

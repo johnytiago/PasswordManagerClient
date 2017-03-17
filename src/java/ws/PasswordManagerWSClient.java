@@ -10,10 +10,9 @@ public class PasswordManagerWSClient {
 
   public PasswordManagerWSClient() {
 	  connect();
-   
   }
   
-  public static void connect() {
+  private static void connect() {
 	  PasswordManagerWSImplService pmWSImplService = new PasswordManagerWSImplService();
 	  _passwordmanagerWS = pmWSImplService.getPasswordManagerWSImplPort();
 	  
