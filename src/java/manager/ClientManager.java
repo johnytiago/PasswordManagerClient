@@ -12,21 +12,21 @@ public class ClientManager{
 		_clientAPI = new PasswordManagerWSClient();
 	}
 
-  public void init(String username, String password){
-    _crypto = new Crypto();
-    _crypto.init(username, password);
-  }
+	public void init(String username, String password){
+		_crypto = new Crypto();
+		_crypto.init(username, password);
+	}
 
 	public void register(){    
 		System.out.println(_clientAPI.register(_crypto.getPubKey()));           
 	}
 
 	public void savePassword(String domain, String username, String password){
-    try{
+		try{
 			System.out.println(_clientAPI.put(_crypto.getPubKey(), _crypto.encrypt(domain.getBytes()), _crypto.encrypt(username.getBytes()), _crypto.encrypt(password.getBytes())));
 		}catch(Exception e){
-      System.out.println("Error saving password");
-    }
+			System.out.println("Error saving password");
+		}
 	}
 
 	public byte[] getPassword(String domain, String username){
@@ -36,7 +36,7 @@ public class ClientManager{
 			return _clientAPI.get(_crypto.getPubKey(), _crypto.encrypt(domain.getBytes()), _crypto.encrypt(username.getBytes()));
 
 		}catch(Exception e){
-      System.out.println("Error getting password");
+			System.out.println("Error getting password");
 			return null;
 		}
 	}

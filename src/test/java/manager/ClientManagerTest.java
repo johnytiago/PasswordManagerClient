@@ -11,6 +11,6 @@ public class ClientManagerTest {
 	@Test
 	public void notImplementedTest() {
 
-    assertEquals("fail", "");
+		assertEquals("fail", "");
 	}
 }

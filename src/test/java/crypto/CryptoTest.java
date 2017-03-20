@@ -8,17 +8,17 @@ public class CryptoTest {
 
 	@Test
 	public void encryptionTest() {
-    Crypto crypto = new Crypto();
-    crypto.init("username", "password");
-    String clearText = "This is cleartext";
+		Crypto crypto = new Crypto();
+		crypto.init("username", "password");
+		String clearText = "This is cleartext";
 
-    byte [] encryptedText = null;
-    try{
-    	encryptedText = crypto.encrypt(clearText.getBytes());
-    } catch (Exception e){
-    	System.out.println(e.getMessage());
-    }
-    String result =  crypto.decrypt(encryptedText);
-    assertEquals(clearText, result);
+		byte [] encryptedText = null;
+		try{
+			encryptedText = crypto.encrypt(clearText.getBytes());
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		String result = crypto.decrypt(encryptedText);
+		assertEquals(clearText, result);
 	}
 }

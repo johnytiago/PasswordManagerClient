@@ -9,9 +9,9 @@ import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PasswordManagerWSClientTest {
-	
+
 	private static PasswordManagerWSClient _clientAPI;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		_clientAPI = new PasswordManagerWSClient();
@@ -39,20 +39,20 @@ public class PasswordManagerWSClientTest {
 	public void test_4_putNotRegistered() {
 		String res = _clientAPI.put("NotRegisterUser".getBytes(), "trash".getBytes(), "trash".getBytes(), "trash".getBytes());
 		assertEquals(message.PasswordManagerMessages.PUBKEY_NOT_FOUND, res);
-  }
+	}
 
 	@Test
 	public void test_5_putSuccess() {
 		String res = _clientAPI.put("pubKey".getBytes(), "domain".getBytes(), "username".getBytes(), "password".getBytes());
 		assertEquals("", res);
-  }
+	}
 
 	@Test
 	public void test_6_putTwice() {
 		String res = _clientAPI.put("pubKey".getBytes(), "domain".getBytes(), "username".getBytes(), "password".getBytes());
 		assertEquals(message.PasswordManagerMessages.USER_ALREADY_EXISTS_DOMAIN, res);
-  }
-	
+	}
+
 	@Test
 	public void test_7_getNotRegistered() {
 		byte[] res = _clientAPI.get("NotRegisterUser".getBytes(), "trash".getBytes(), "trash".getBytes());

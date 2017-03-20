@@ -23,179 +23,179 @@ import javax.crypto.NoSuchPaddingException;
 
 public class Crypto {
 
-  private static String _username;
-  private static String _password;
-  private static KeyStore _clientKeyStore;
+	private static String _username;
+	private static String _password;
+	private static KeyStore _clientKeyStore;
 
-  private String getUsername() {
-    return _username;
-  }
+	private String getUsername() {
+		return _username;
+	}
 
-  private String getPassword() {
-    return _password;
-  }
+	private String getPassword() {
+		return _password;
+	}
 
-  public void init(String username, String password){
-    _username = username;
-    _password = password;
-    doInitLoad();
-  }
+	public void init(String username, String password){
+		_username = username;
+		_password = password;
+		doInitLoad();
+	}
 
-  public byte[] getPubKey(){
-    Key key = null;
-    PublicKey publicKey = null;
+	public byte[] getPubKey(){
+		Key key = null;
+		PublicKey publicKey = null;
 
-    try {
-      key = _clientKeyStore.getKey(getUsername(), getPassword().toCharArray());
-    } catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e) {}
+		try {
+			key = _clientKeyStore.getKey(getUsername(), getPassword().toCharArray());
+		} catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e) {}
 
-    if (key instanceof PrivateKey) {
-      // Get certificate of public key
-      Certificate cert = null;
-      try {
-        cert = _clientKeyStore.getCertificate(getUsername());
-      } catch (KeyStoreException e) {}
+		if (key instanceof PrivateKey) {
+			// Get certificate of public key
+			Certificate cert = null;
+			try {
+				cert = _clientKeyStore.getCertificate(getUsername());
+			} catch (KeyStoreException e) {}
 
-      // Get public key
-      publicKey = cert.getPublicKey();
-    }
-    return publicKey.getEncoded();
-  }
+			// Get public key
+			publicKey = cert.getPublicKey();
+		}
+		return publicKey.getEncoded();
+	}
 
-  public byte[] encrypt(byte[] cleartext) throws Exception{
-    byte[] encrypted = null;
+	public byte[] encrypt(byte[] cleartext) throws Exception{
+		byte[] encrypted = null;
 
-    Key key = _clientKeyStore.getKey(getUsername(), getPassword().toCharArray());
+		Key key = _clientKeyStore.getKey(getUsername(), getPassword().toCharArray());
 
-    if (key instanceof PrivateKey) {
-      // Get certificate of public key
-      Certificate cert = _clientKeyStore.getCertificate(getUsername());
+		if (key instanceof PrivateKey) {
+			// Get certificate of public key
+			Certificate cert = _clientKeyStore.getCertificate(getUsername());
 
-      // Get public key
-      PublicKey publicKey = cert.getPublicKey();
+			// Get public key
+			PublicKey publicKey = cert.getPublicKey();
 
-      // Return a key pair
-      new KeyPair(publicKey, (PrivateKey) key);
+			// Return a key pair
+			new KeyPair(publicKey, (PrivateKey) key);
 
-      // Initialize cipher object
-      Cipher aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-      aesCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+			// Initialize cipher object
+			Cipher aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			aesCipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
-      // Encrypt the cleartext
-      encrypted = aesCipher.doFinal(cleartext);
+			// Encrypt the cleartext
+			encrypted = aesCipher.doFinal(cleartext);
 
-    }
-    return encrypted;
-  }
+		}
+		return encrypted;
+	}
 
-  public String decrypt(byte[] encryptedMessage){
-    String decryptedMessage = "";
-    Key privateKey = null;
+	public String decrypt(byte[] encryptedMessage){
+		String decryptedMessage = "";
+		Key privateKey = null;
 
-    try {
-      privateKey = _clientKeyStore.getKey(getUsername(), getPassword().toCharArray());
-    } catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e2) {
-      System.out.println(e2.getMessage());
-      System.out.println("Error Fetching PrivKey");
-    }
+		try {
+			privateKey = _clientKeyStore.getKey(getUsername(), getPassword().toCharArray());
+		} catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e2) {
+			System.out.println(e2.getMessage());
+			System.out.println("Error Fetching PrivKey");
+		}
 
-    Cipher aesCipher = null;
-    try {
-      aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-      aesCipher.init(Cipher.DECRYPT_MODE, privateKey);
-    } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e1) {
-      System.out.println(e1.getMessage());
-      System.out.println("Error Iniciating Cipher");
-    }
+		Cipher aesCipher = null;
+		try {
+			aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			aesCipher.init(Cipher.DECRYPT_MODE, privateKey);
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e1) {
+			System.out.println(e1.getMessage());
+			System.out.println("Error Iniciating Cipher");
+		}
 
-    try {
-      decryptedMessage = new String(aesCipher.doFinal(encryptedMessage));
-    } catch (IllegalBlockSizeException | BadPaddingException e) {
-      System.out.println(e.getMessage());
-      System.out.println("Error decrypting message");
-    }
-    return decryptedMessage;
-  }
+		try {
+			decryptedMessage = new String(aesCipher.doFinal(encryptedMessage));
+		} catch (IllegalBlockSizeException | BadPaddingException e) {
+			System.out.println(e.getMessage());
+			System.out.println("Error decrypting message");
+		}
+		return decryptedMessage;
+	}
 
-  private void doInitLoad(){
-    KeyPairGenerator kgen = null;
-    try {
-      kgen = KeyPairGenerator.getInstance("RSA");
-    } catch (NoSuchAlgorithmException e) {}
+	private void doInitLoad(){
+		KeyPairGenerator kgen = null;
+		try {
+			kgen = KeyPairGenerator.getInstance("RSA");
+		} catch (NoSuchAlgorithmException e) {}
 
-    kgen.initialize(1024);
-    KeyPair pair = kgen.generateKeyPair();
+		kgen.initialize(1024);
+		KeyPair pair = kgen.generateKeyPair();
 
-    saveKeypair(pair);
-  }
+		saveKeypair(pair);
+	}
 
-  private void saveKeypair(KeyPair pair){
-    try{
-      KeyStore keystore = initializeKeyStore();
+	private void saveKeypair(KeyPair pair){
+		try{
+			KeyStore keystore = initializeKeyStore();
 
-      X509Certificate [] cert = GenCert.generateCertificate(pair);
+			X509Certificate [] cert = GenCert.generateCertificate(pair);
 
-      Key key = keystore.getKey(getUsername(), getPassword().toCharArray());
-      keystore.setCertificateEntry(getUsername(), cert[0]);
+			Key key = keystore.getKey(getUsername(), getPassword().toCharArray());
+			keystore.setCertificateEntry(getUsername(), cert[0]);
 
-      if (key instanceof PrivateKey) {
+			if (key instanceof PrivateKey) {
 
-        Certificate certificate = keystore.getCertificate(getUsername());
+				Certificate certificate = keystore.getCertificate(getUsername());
 
-        // Get public key
-        PublicKey publicKey = cert[0].getPublicKey();
+				// Get public key
+				PublicKey publicKey = cert[0].getPublicKey();
 
-        // Return a key pair
-        new KeyPair(publicKey, (PrivateKey) key);
-      }
-    }catch(Exception e){
-      System.err.println("Failed to save keypair");
-    }
-  }	
+				// Return a key pair
+				new KeyPair(publicKey, (PrivateKey) key);
+			}
+		}catch(Exception e){
+			System.err.println("Failed to save keypair");
+		}
+	}	
 
-  private KeyStore initializeKeyStore(){
-    try{
-      File f = new File(getKeyStoreDirectory());
-      if(!f.exists()){
-        KeyStore ks = KeyStore.getInstance("JCEKS");
-        ks.load(null, getPassword().toCharArray()); 
-        /*
+	private KeyStore initializeKeyStore(){
+		try{
+			File f = new File(getKeyStoreDirectory());
+			if(!f.exists()){
+				KeyStore ks = KeyStore.getInstance("JCEKS");
+				ks.load(null, getPassword().toCharArray()); 
+				/*
            password = new KeyStore.PasswordProtection(keystorePassword); 
-           */
-        FileOutputStream fos = new FileOutputStream(getKeyStoreDirectory());
+				 */
+				FileOutputStream fos = new FileOutputStream(getKeyStoreDirectory());
 
-        ks.store(fos, getPassword().toCharArray());
+				ks.store(fos, getPassword().toCharArray());
 
-        fos.close(); 
-        _clientKeyStore = ks;
-      }
-      else{
-        openKeystore();
-      }
-    }catch(Exception e){
-      System.err.println("Failed to initialize KeyStore");
-    }
+				fos.close(); 
+				_clientKeyStore = ks;
+			}
+			else{
+				openKeystore();
+			}
+		}catch(Exception e){
+			System.err.println("Failed to initialize KeyStore");
+		}
 
-    return _clientKeyStore;
+		return _clientKeyStore;
 
-  }
+	}
 
-  private void openKeystore(){
-    try{
-      FileInputStream fis = new FileInputStream(getKeyStoreDirectory()); 
-      KeyStore ks = KeyStore.getInstance("JCEKS");
+	private void openKeystore(){
+		try{
+			FileInputStream fis = new FileInputStream(getKeyStoreDirectory()); 
+			KeyStore ks = KeyStore.getInstance("JCEKS");
 
-      ks.load(fis, getPassword().toCharArray());
-      fis.close();
+			ks.load(fis, getPassword().toCharArray());
+			fis.close();
 
-      _clientKeyStore = ks;
+			_clientKeyStore = ks;
 
-    }catch(Exception e){
-      System.err.println("Failed to open Keystore");
-    }	
-  }
+		}catch(Exception e){
+			System.err.println("Failed to open Keystore");
+		}	
+	}
 
-  private String getKeyStoreDirectory(){
-    return getUsername() + ".jce";
-  }
+	private String getKeyStoreDirectory(){
+		return getUsername() + ".jce";
+	}
 }
