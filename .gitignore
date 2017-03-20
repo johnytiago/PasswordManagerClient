@@ -1,5 +1,6 @@
-ompiled class file
+# Compiled class file
 *.class
+*.jce
 
 # Log file
 *.log
