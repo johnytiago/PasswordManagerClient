@@ -19,8 +19,14 @@ public class ClientManagerTest {
     ClientManager manager = new ClientManager();
     manager.init("username", "password");
     String clearText = "This is cleartext";
-    byte [] encryptedText = manager.encrypt(clearText.getBytes());
+
+    byte [] encryptedText = null;
+    try{
+    	encryptedText = manager.encript(clearText.getBytes());
+    } catch (Exception e){
+
+    }
     String result =  manager.decrypt(encryptedText);
-    AssertEquals(clearText, result);
+    assertEquals(clearText, result);
 	}
 }
