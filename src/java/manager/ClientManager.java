@@ -2,6 +2,7 @@ package manager;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -16,7 +17,10 @@ import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import ws.PasswordManagerWSClient;
 					
@@ -92,10 +96,10 @@ public class ClientManager{
 		return publicKey.getEncoded();
 	}
     
-    private byte[] encript(byte[] cleartext) throws Exception{
+    public byte[] encript(byte[] cleartext) throws Exception{
 		byte[] encripted = null;
 		
-		Key key = _clientKeyStore.getKey(getUsername(), "password".toCharArray());
+		Key key = _clientKeyStore.getKey(getUsername(), getPassword().toCharArray());
 		
 		if (key instanceof PrivateKey) {
 		      // Get certificate of public key
@@ -116,6 +120,26 @@ public class ClientManager{
 			
 			}
 		return encripted;
+    }
+    
+    public String decrypt(byte[] encryptedMessage){
+		String decryptedMessage = "";
+		Key privateKey = null;
+		
+		try {
+			privateKey = _clientKeyStore.getKey(getUsername(), getPassword().toCharArray());
+		} catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e2) {}
+		
+		Cipher aesCipher = null;
+		try {
+			aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			aesCipher.init(Cipher.DECRYPT_MODE, privateKey);
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e1) {}
+		
+		try {
+			decryptedMessage = new String(aesCipher.doFinal(encryptedMessage));
+		} catch (IllegalBlockSizeException | BadPaddingException e) {}
+		return decryptedMessage;
     }
     
 	private void doInitLoad(){/*TODO - Check if KGEN already exists.*/
