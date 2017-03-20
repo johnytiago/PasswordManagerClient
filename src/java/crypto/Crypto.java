@@ -3,7 +3,6 @@ package crypto;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyPair;
@@ -21,9 +20,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Crypto {
 

@@ -1,7 +1,7 @@
 package manager;
 
-import ws.PasswordManagerWSClient;
 import crypto.Crypto;
+import ws.PasswordManagerWSClient;
 
 public class ClientManager{
 

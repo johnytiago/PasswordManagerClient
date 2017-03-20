@@ -1,8 +1,5 @@
 package ws;
 
-import ws.PasswordManagerWS;
-import ws.PasswordManagerWSImplService;
-
 public class PasswordManagerWSClient {
 
   private static PasswordManagerWS _passwordmanagerWS;
