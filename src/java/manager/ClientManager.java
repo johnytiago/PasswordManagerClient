@@ -2,6 +2,7 @@ package manager;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyPair;
@@ -142,7 +143,7 @@ public class ClientManager{
 		return decryptedMessage;
     }
     
-	private void doInitLoad(){/*TODO - Check if KGEN already exists.*/
+	private void doInitLoad(){
 	    KeyPairGenerator kgen = null;
 		try {
 			kgen = KeyPairGenerator.getInstance("RSA");
@@ -156,22 +157,15 @@ public class ClientManager{
 
     private void saveKeypair(KeyPair pair){
     	try{
-    		createKeystore(getUsername(), getPassword().toCharArray());
-    		KeyStore keystore = _clientKeyStore; 
-    		//###############################################################
+    		KeyStore keystore = initializeKeyStore();
+    		
 			X509Certificate [] cert = GenCert.generateCertificate(pair);
-	
-    		//###################################################
-    		
-    		
-		    //String ali = "mykeypair";
 
 		    Key key = keystore.getKey(getUsername(), getPassword().toCharArray());
 			keystore.setCertificateEntry(getUsername(), cert[0]);
 
-    	 if ( key instanceof PrivateKey) {
+    	 if (key instanceof PrivateKey) {
 
-		      // Get certificate of public key
 		      Certificate certificate = keystore.getCertificate(getUsername());
 
 		      // Get public key
@@ -180,62 +174,48 @@ public class ClientManager{
 		      // Return a key pair
 		      new KeyPair(publicKey, (PrivateKey) key);
     	}
-    	}catch(Exception e){
-    		
-    	}
+    	}catch(Exception e){}
     }	
 
-	private void createKeystore(String keystoreName, char[] keystorePassword){
+	private KeyStore initializeKeyStore(){
 		try{
-			File f = new File("./"+getUsername()+".jce");
+			File f = new File(getKeyStoreDirectory());
 			if(!f.exists()){
-		   
-			// Create an instance of KeyStore of type “JCEKS”.
-			 // JCEKS refers the KeyStore implementation from SunJCE provider
-			KeyStore ks = KeyStore.getInstance("JCEKS");
-			 // Load the null Keystore and set the password to keyStorepassword
-			 ks.load(null, keystorePassword); 
-			 /*
-			password = new KeyStore.PasswordProtection(keystorePassword); 
-			*/
-			//Create a new file to store the KeyStore object
-			java.io.FileOutputStream fos = new java.io.FileOutputStream(keystoreName + ".jce");
+				KeyStore ks = KeyStore.getInstance("JCEKS");
+				 ks.load(null, getPassword().toCharArray()); 
+				 /*
+				password = new KeyStore.PasswordProtection(keystorePassword); 
+				*/
+				FileOutputStream fos = new FileOutputStream(getKeyStoreDirectory());
 	
-			//Write the KeyStore into the file
-			ks.store(fos, keystorePassword);
-			//Close the file stream
-			fos.close(); 
-			_clientKeyStore=ks;
-			System.out.println("success");
+				ks.store(fos, getPassword().toCharArray());
+			
+				fos.close(); 
+				_clientKeyStore = ks;
 			}
 			else{
-				openKeystore(getUsername(),keystorePassword);
-		    System.out.println("fail");
+				openKeystore();
 			}
-		}catch(Exception e){
-			
-		}
+		}catch(Exception e){}
+		
+	return _clientKeyStore;
+		
 	}
 
-	private KeyStore openKeystore(String keystoreName, char [] keystorePassword){
+	private void openKeystore(){
 		try{
-			//Open the KeyStore file
-			FileInputStream fis = new FileInputStream(keystoreName + ".jce"); 
-			//Create an instance of KeyStore of type “JCEKS”
+			FileInputStream fis = new FileInputStream(getKeyStoreDirectory()); 
 			KeyStore ks = KeyStore.getInstance("JCEKS");
-			//Load the key entries from the file into the KeyStore object.
-			ks.load(fis, keystorePassword);
+			
+			ks.load(fis, getPassword().toCharArray());
 			fis.close();
-			//Get the key with the given alias.
-			
-			//String alias=args[0];
-			//Key k = ks.getKey(alias, "changeme".toCharArray()); 
-			_clientKeyStore=ks;
-			return ks;
+
+			_clientKeyStore = ks;
 		
-		}catch(Exception e){
-			
-		}	
-	return null;
+		}catch(Exception e){}	
+	}
+	
+	private String getKeyStoreDirectory(){
+		return getUsername() + ".jce";
 	}
 }
