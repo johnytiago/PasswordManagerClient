@@ -3,6 +3,7 @@
 	<name>PasswordManagerClient</name>
 	<comment></comment>
 	<projects>
+		<project>PasswordManagerCommon</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

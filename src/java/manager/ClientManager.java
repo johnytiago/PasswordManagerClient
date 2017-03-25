@@ -18,12 +18,16 @@ public class ClientManager{
 	}
 
 	public void register(){    
-		System.out.println(_clientAPI.register(_crypto.getPubKey()));           
+		System.out.println(_clientAPI.register(_crypto.getPublicKey().getEncoded()));           
 	}
 
 	public void savePassword(String domain, String username, String password){
 		try{
-			System.out.println(_clientAPI.put(_crypto.getPubKey(), _crypto.encrypt(domain.getBytes()), _crypto.encrypt(username.getBytes()), _crypto.encrypt(password.getBytes())));
+			System.out.println(
+					_clientAPI.put(_crypto.getPublicKey().getEncoded(),
+					_crypto.encrypt(domain.getBytes(), _crypto.getPublicKey()),
+					_crypto.encrypt(username.getBytes(), _crypto.getPublicKey()),
+					_crypto.encrypt(password.getBytes(), _crypto.getPublicKey())));
 		}catch(Exception e){
 			System.out.println("Error saving password");
 		}
@@ -33,7 +37,9 @@ public class ClientManager{
 		try{
 			//String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 			//byte[] stampCif = encrypt(timeStamp.getBytes());
-			return _clientAPI.get(_crypto.getPubKey(), _crypto.encrypt(domain.getBytes()), _crypto.encrypt(username.getBytes()));
+			return _clientAPI.get(_crypto.getPublicKey().getEncoded(),
+					_crypto.encrypt(domain.getBytes(), _crypto.getPublicKey()),
+					_crypto.encrypt(username.getBytes(), _crypto.getPublicKey()));
 
 		}catch(Exception e){
 			System.out.println("Error getting password");
