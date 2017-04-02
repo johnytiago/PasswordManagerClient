@@ -17,18 +17,18 @@ public class PasswordManagerWSClient {
 	  System.out.println("Found service running at: " + pmWSImplService.getWSDLDocumentLocation().toString());
   }
   
-  public byte[] get(byte[] pubKey, byte[] domain, byte[] username) {
-	  return _passwordmanagerWS.get(pubKey, domain, username);
+  public byte[] get(Envelope envelope) {
+	  return _passwordmanagerWS.get(envelope);
 	  // check if res equals error ?
   }
   
-  public String put(byte[] pubKey, byte[] domain, byte[] username, byte[] password) {
-	 return _passwordmanagerWS.put(pubKey, domain, username, password);
+  public void put(Envelope envelope) {
+	  _passwordmanagerWS.put(envelope);
 	  // check if res equals error ?
   }
   
-  public String register(byte[] pubKey) {
-	  return _passwordmanagerWS.register(pubKey);
+  public void register(Envelope envelope) {
+	  _passwordmanagerWS.register(envelope);
 	  // check if res equals error ?
   }
 }

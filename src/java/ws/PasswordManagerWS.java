@@ -26,8 +26,6 @@ public interface PasswordManagerWS {
 
     /**
      * 
-     * @param arg2
-     * @param arg1
      * @param arg0
      * @return
      *     returns byte[]
@@ -39,49 +37,30 @@ public interface PasswordManagerWS {
     @Action(input = "http://ws/PasswordManagerWS/getRequest", output = "http://ws/PasswordManagerWS/getResponse")
     public byte[] get(
         @WebParam(name = "arg0", targetNamespace = "")
-        byte[] arg0,
-        @WebParam(name = "arg1", targetNamespace = "")
-        byte[] arg1,
-        @WebParam(name = "arg2", targetNamespace = "")
-        byte[] arg2);
+        Envelope arg0);
 
     /**
      * 
-     * @param arg3
-     * @param arg2
-     * @param arg1
      * @param arg0
-     * @return
-     *     returns java.lang.String
      */
     @WebMethod
-    @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "put", targetNamespace = "http://ws/", className = "ws.Put")
     @ResponseWrapper(localName = "putResponse", targetNamespace = "http://ws/", className = "ws.PutResponse")
     @Action(input = "http://ws/PasswordManagerWS/putRequest", output = "http://ws/PasswordManagerWS/putResponse")
-    public String put(
+    public void put(
         @WebParam(name = "arg0", targetNamespace = "")
-        byte[] arg0,
-        @WebParam(name = "arg1", targetNamespace = "")
-        byte[] arg1,
-        @WebParam(name = "arg2", targetNamespace = "")
-        byte[] arg2,
-        @WebParam(name = "arg3", targetNamespace = "")
-        byte[] arg3);
+        Envelope arg0);
 
     /**
      * 
      * @param arg0
-     * @return
-     *     returns java.lang.String
      */
     @WebMethod
-    @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "register", targetNamespace = "http://ws/", className = "ws.Register")
     @ResponseWrapper(localName = "registerResponse", targetNamespace = "http://ws/", className = "ws.RegisterResponse")
     @Action(input = "http://ws/PasswordManagerWS/registerRequest", output = "http://ws/PasswordManagerWS/registerResponse")
-    public String register(
+    public void register(
         @WebParam(name = "arg0", targetNamespace = "")
-        byte[] arg0);
+        Envelope arg0);
 
 }
