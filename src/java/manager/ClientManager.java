@@ -23,12 +23,18 @@ public class ClientManager{
 
 	public void savePassword(String domain, String username, String password){
 		try{
+
+      byte[] pubKey  = _crypto.getPublicKey().getEncoded();
+      byte[] domainHash = _crypto.genSign(domain.getBytes(), _crypto.getPrivateKey());
+      byte[] usernameHash = _crypto.genSign(username.getBytes(), _crypto.getPrivateKey());
+      byte[] encryptedPassword = _crypto.encrypt(password.getBytes(), _crypto.getPublicKey());
+      byte[] tripletHash = _crypto.signTriplet( domainHash, usernameHash, encryptedPassword );
+
 			System.out.println(
-					_clientAPI.put(_crypto.getPublicKey().getEncoded(),
-					_crypto.encrypt(domain.getBytes(), _crypto.getPublicKey()),
-					_crypto.encrypt(username.getBytes(), _crypto.getPublicKey()),
-					_crypto.encrypt(password.getBytes(), _crypto.getPublicKey())));
-		}catch(Exception e){
+        _clientAPI.put( pubKey, domainHash, usernameHash, encryptedPassword, tripletHash)
+      );
+
+		} catch(Exception e){
 			System.out.println("Error saving password");
 		}
 	}

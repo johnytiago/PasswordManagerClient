@@ -19,7 +19,7 @@ public class PasswordManagerWSClient {
 	  System.out.println("Found service running at: " + pmWSImplService.getWSDLDocumentLocation().toString());
   }
   
-  public byte[] get(byte[] pubKey, byte[] domain, byte[] username) {
+  public byte[] get(byte[] pubKey, byte[] domainHash, byte[] usernameHash) {
 	  Envelope envelope = new Envelope();
 		
 	  Message msg = new Message();
@@ -36,42 +36,39 @@ public class PasswordManagerWSClient {
 	  }
   }
   
-  public String put(byte[] pubKey, byte[] domain, byte[] username, byte[] password) {
+  public String put(byte[] pubKey, byte[] domainHash, byte[] usernameHash, byte[] tripletHash, byte[] password) {
+
+	  Envelope envelope = new Envelope(
+        pubKey,
+        domainHash,
+        usernameHash,
+        tripletHash,
+        password,
+        null);
 	  
-	  // check if res equals error ?
-	  
-	  Envelope envelope = new Envelope();
-		
-	  Message msg = new Message();
-	  msg.setPublicKey(pubKey);
-	  msg.setDomain(domain);
-	  msg.setUsername(username);
-	  msg.setPassword(password);
-	  
-	  envelope.setMessage(msg);
 	  try{
 		  _passwordmanagerWS.put(envelope);
+      return "";
 	  }
 	  catch(PasswordManagerExceptionHandler pme){
 		  return pme.getMessage();
 	  }
-	  return "";
   }
   
   public String register(byte[] pubKey) {
-	  Envelope envelope = new Envelope();
-	
+
 	  Message msg = new Message();
-	  msg.setPublicKey(pubKey);
-	  
-	  envelope.setMessage(msg);
+	  msg.publicKey = pubKey;
+	  Envelope envelope = new Envelope();
+	  envelope.message = msg;
+
 	  try{
 		  _passwordmanagerWS.register(envelope);
+      return "";
 	  }
 	  catch(PasswordManagerExceptionHandler pme){
 		  return pme.getMessage();
 	  }
-	  return "";
 	  // check if res equals error ?
   }
 }
