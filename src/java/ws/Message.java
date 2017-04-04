@@ -16,11 +16,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="domain" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
- *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *         &lt;element name="usernameHash" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *         &lt;element name="domainHash" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
+ *         &lt;element name="tripletHash" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *         &lt;element name="counter" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="publicKey" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *       &lt;/sequence>
@@ -33,67 +32,21 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "message", propOrder = {
-    "domain",
-    "username",
     "password",
     "usernameHash",
     "domainHash",
+    "tripletHash",
     "counter",
     "publicKey"
 })
 public class Message {
 
-    protected byte[] domain;
-    protected byte[] username;
     protected byte[] password;
     protected byte[] usernameHash;
     protected byte[] domainHash;
+    protected byte[] tripletHash;
     protected int counter;
     protected byte[] publicKey;
-
-    /**
-     * Gets the value of the domain property.
-     * 
-     * @return
-     *     possible object is
-     *     byte[]
-     */
-    public byte[] getDomain() {
-        return domain;
-    }
-
-    /**
-     * Sets the value of the domain property.
-     * 
-     * @param value
-     *     allowed object is
-     *     byte[]
-     */
-    public void setDomain(byte[] value) {
-        this.domain = value;
-    }
-
-    /**
-     * Gets the value of the username property.
-     * 
-     * @return
-     *     possible object is
-     *     byte[]
-     */
-    public byte[] getUsername() {
-        return username;
-    }
-
-    /**
-     * Sets the value of the username property.
-     * 
-     * @param value
-     *     allowed object is
-     *     byte[]
-     */
-    public void setUsername(byte[] value) {
-        this.username = value;
-    }
 
     /**
      * Gets the value of the password property.
@@ -159,6 +112,28 @@ public class Message {
      */
     public void setDomainHash(byte[] value) {
         this.domainHash = value;
+    }
+
+    /**
+     * Gets the value of the tripletHash property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getTripletHash() {
+        return tripletHash;
+    }
+
+    /**
+     * Sets the value of the tripletHash property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setTripletHash(byte[] value) {
+        this.tripletHash = value;
     }
 
     /**

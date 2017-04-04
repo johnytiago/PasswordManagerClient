@@ -24,8 +24,8 @@ public class PasswordManagerWSClient {
 		
 	  Message msg = new Message();
 	  msg.setPublicKey(pubKey);
-	  msg.setDomain(domain);
-	  msg.setUsername(username);
+	  msg.setDomainHash(domainHash);
+	  msg.setUsernameHash(usernameHash);
 	  
 	  envelope.setMessage(msg);
 	  try{
@@ -37,18 +37,20 @@ public class PasswordManagerWSClient {
   }
   
   public String put(byte[] pubKey, byte[] domainHash, byte[] usernameHash, byte[] tripletHash, byte[] password) {
-
-	  Envelope envelope = new Envelope(
-        pubKey,
-        domainHash,
-        usernameHash,
-        tripletHash,
-        password,
-        null);
 	  
+	  Message msg = new Message();
+      msg.setPublicKey( pubKey);
+      msg.setDomainHash(domainHash);
+      msg.setUsernameHash(usernameHash);
+      msg.setTripletHash(tripletHash);
+      msg.setPassword(password);
+      
+      Envelope envelope = new Envelope();
+	  envelope.setMessage(msg);
+      
 	  try{
 		  _passwordmanagerWS.put(envelope);
-      return "";
+		  return "";
 	  }
 	  catch(PasswordManagerExceptionHandler pme){
 		  return pme.getMessage();

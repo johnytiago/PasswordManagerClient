@@ -1,6 +1,7 @@
 package manager;
 
 import crypto.Crypto;
+import java.security.PrivateKey;
 import ws.PasswordManagerWSClient;
 
 public class ClientManager{
@@ -25,10 +26,10 @@ public class ClientManager{
 		try{
 
       byte[] pubKey  = _crypto.getPublicKey().getEncoded();
-      byte[] domainHash = _crypto.genSign(domain.getBytes(), _crypto.getPrivateKey());
-      byte[] usernameHash = _crypto.genSign(username.getBytes(), _crypto.getPrivateKey());
+      byte[] domainHash = _crypto.genSign(domain.getBytes(), (PrivateKey)_crypto.getPrivateKey());
+      byte[] usernameHash = _crypto.genSign(username.getBytes(), (PrivateKey)_crypto.getPrivateKey());
       byte[] encryptedPassword = _crypto.encrypt(password.getBytes(), _crypto.getPublicKey());
-      byte[] tripletHash = _crypto.signTriplet( domainHash, usernameHash, encryptedPassword );
+      byte[] tripletHash = _crypto.signTriplet( domainHash, usernameHash, encryptedPassword, (PrivateKey)_crypto.getPrivateKey());
 
 			System.out.println(
         _clientAPI.put( pubKey, domainHash, usernameHash, encryptedPassword, tripletHash)

@@ -1,5 +1,7 @@
 package ws;
 
+import message.PasswordManagerMessages;
+
 import static org.junit.Assert.assertEquals;
 
 import org.junit.BeforeClass;
