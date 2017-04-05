@@ -6,24 +6,24 @@ import ws.PasswordManagerWSClient;
 
 public class ClientManager{
 
-	private static PasswordManagerWSClient _clientAPI;
-	private Crypto _crypto;
+  private static PasswordManagerWSClient _clientAPI;
+  private Crypto _crypto;
 
-	public static void main(String[] args) {
-		_clientAPI = new PasswordManagerWSClient();
-	}
+  public static void main(String[] args) {
+    _clientAPI = new PasswordManagerWSClient();
+  }
 
-	public void init(String username, String password){
-		_crypto = new Crypto();
-		_crypto.init(username, password);
-	}
+  public void init(String username, String password){
+    _crypto = new Crypto();
+    _crypto.init(username, password);
+  }
 
-	public void register(){    
-		System.out.println(_clientAPI.register(_crypto.getPublicKey().getEncoded()));           
-	}
+  public void register(){    
+    System.out.println(_clientAPI.register(_crypto.getPublicKey().getEncoded()));           
+  }
 
-	public void savePassword(String domain, String username, String password){
-		try{
+  public void savePassword(String domain, String username, String password){
+    try{
 
       byte[] pubKey  = _crypto.getPublicKey().getEncoded();
       byte[] domainHash = _crypto.genSign(domain.getBytes(), (PrivateKey)_crypto.getPrivateKey());
@@ -31,26 +31,26 @@ public class ClientManager{
       byte[] encryptedPassword = _crypto.encrypt(password.getBytes(), _crypto.getPublicKey());
       byte[] tripletHash = _crypto.signTriplet( domainHash, usernameHash, encryptedPassword, (PrivateKey)_crypto.getPrivateKey());
 
-			System.out.println(
-        _clientAPI.put( pubKey, domainHash, usernameHash, encryptedPassword, tripletHash)
-      );
+      String res = _clientAPI.put( pubKey, domainHash, usernameHash, encryptedPassword, tripletHash);
+      System.out.println( res );
 
-		} catch(Exception e){
-			System.out.println("Error saving password");
-		}
-	}
+    } catch(Exception e){
+      System.out.println("Error saving password");
+    }
+  }
 
-	public byte[] getPassword(String domain, String username){
-		try{
-			//String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-			//byte[] stampCif = encrypt(timeStamp.getBytes());
-			return _clientAPI.get(_crypto.getPublicKey().getEncoded(),
-					_crypto.encrypt(domain.getBytes(), _crypto.getPublicKey()),
-					_crypto.encrypt(username.getBytes(), _crypto.getPublicKey()));
+  public byte[] getPassword(String domain, String username){
+    try{
+      byte[] pubKey  = _crypto.getPublicKey().getEncoded();
+      byte[] domainHash = _crypto.genSign(domain.getBytes(), (PrivateKey)_crypto.getPrivateKey());
+      byte[] usernameHash = _crypto.genSign(username.getBytes(), (PrivateKey)_crypto.getPrivateKey());
 
-		}catch(Exception e){
-			System.out.println("Error getting password");
-			return null;
-		}
-	}
+      // TODO : Expect the password and triplet and confirm is the same hash
+      return _clientAPI.get( pubKey, domainHash, usernameHash );
+
+    }catch(Exception e){
+      System.out.println("Error getting password");
+      return null;
+    }
+  }
 }
