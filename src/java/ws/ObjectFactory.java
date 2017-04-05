@@ -30,7 +30,6 @@ public class ObjectFactory {
     private final static QName _Get_QNAME = new QName("http://ws/", "get");
     private final static QName _Put_QNAME = new QName("http://ws/", "put");
     private final static QName _Register_QNAME = new QName("http://ws/", "register");
-    private final static QName _GetResponseReturn_QNAME = new QName("", "return");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ws
@@ -155,15 +154,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws/", name = "register")
     public JAXBElement<Register> createRegister(Register value) {
         return new JAXBElement<Register>(_Register_QNAME, Register.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "return", scope = GetResponse.class)
-    public JAXBElement<byte[]> createGetResponseReturn(byte[] value) {
-        return new JAXBElement<byte[]>(_GetResponseReturn_QNAME, byte[].class, GetResponse.class, ((byte[]) value));
     }
 
 }

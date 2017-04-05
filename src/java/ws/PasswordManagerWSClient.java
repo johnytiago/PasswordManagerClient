@@ -36,16 +36,16 @@ public class PasswordManagerWSClient {
 	  }
   }
   
-  public String put(byte[] pubKey, byte[] domainHash, byte[] usernameHash, byte[] tripletHash, byte[] password) {
+  public String put(byte[] pubKey, byte[] domainHash, byte[] usernameHash, byte[] password, byte[] tripletHash, ) {
 	  
-	  Message msg = new Message();
-      msg.setPublicKey( pubKey);
-      msg.setDomainHash(domainHash);
-      msg.setUsernameHash(usernameHash);
-      msg.setTripletHash(tripletHash);
-      msg.setPassword(password);
-      
-      Envelope envelope = new Envelope();
+    Message msg = new Message();
+    msg.setPublicKey( pubKey);
+    msg.setDomainHash(domainHash);
+    msg.setUsernameHash(usernameHash);
+    msg.setTripletHash(tripletHash);
+    msg.setPassword(password);
+
+    Envelope envelope = new Envelope();
 	  envelope.setMessage(msg);
       
 	  try{
