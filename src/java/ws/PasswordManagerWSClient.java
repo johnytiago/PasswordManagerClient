@@ -19,24 +19,31 @@ public class PasswordManagerWSClient {
     System.out.println("Found service running at: " + pmWSImplService.getWSDLDocumentLocation().toString());
   }
 
-  public byte[] get(byte[] pubKey, byte[] domainHash, byte[] usernameHash) {
+  public Envelope register(byte[] pubKey) throws PasswordManagerExceptionHandler {
+
+    Message msg = new Message();
+    msg.publicKey = pubKey;
     Envelope envelope = new Envelope();
+    envelope.message = msg;
+
+    return _passwordmanagerWS.register(envelope);
+  }
+
+  public Envelope get(byte[] pubKey, byte[] domainHash, byte[] usernameHash) throws PasswordManagerExceptionHandler{
 
     Message msg = new Message();
     msg.setPublicKey(pubKey);
     msg.setDomainHash(domainHash);
     msg.setUsernameHash(usernameHash);
 
+    Envelope envelope = new Envelope();
     envelope.setMessage(msg);
-    try{
-      return _passwordmanagerWS.get(envelope);
-    }
-    catch(PasswordManagerExceptionHandler pme){
-      return null;
-    }
+
+    return _passwordmanagerWS.get(envelope);
   }
 
-  public String put(byte[] pubKey, byte[] domainHash, byte[] usernameHash, byte[] password, byte[] tripletHash, ) {
+  public Envelope put(byte[] pubKey, byte[] domainHash, byte[] usernameHash, byte[] password, byte[] tripletHash ) 
+      throws PasswordManagerExceptionHandler {
 
     Message msg = new Message();
     msg.setPublicKey( pubKey);
@@ -48,29 +55,7 @@ public class PasswordManagerWSClient {
     Envelope envelope = new Envelope();
     envelope.setMessage(msg);
 
-    try{
-      _passwordmanagerWS.put(envelope);
-      return "";
-    }
-    catch(PasswordManagerExceptionHandler pme){
-      return pme.getMessage();
-    }
+    return _passwordmanagerWS.put(envelope);
   }
 
-  public String register(byte[] pubKey) {
-
-    Message msg = new Message();
-    msg.publicKey = pubKey;
-    Envelope envelope = new Envelope();
-    envelope.message = msg;
-
-    try{
-      _passwordmanagerWS.register(envelope);
-      return "";
-    }
-    catch(PasswordManagerExceptionHandler pme){
-      return pme.getMessage();
-    }
-    // check if res equals error ?
-  }
 }
