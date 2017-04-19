@@ -6,12 +6,14 @@ import crypto.Crypto;
 import ws.PasswordManagerWSClient;
 import ws.Envelope;
 import ws.Message;
+import util.Util;
 
 
 public class ClientManager{
 
   private static PasswordManagerWSClient _clientAPI;
   private Crypto _crypto;
+  private Util _util = new Util();
 
   public static void main(String[] args) {
     _clientAPI = new PasswordManagerWSClient();
@@ -25,9 +27,12 @@ public class ClientManager{
   public void register(){    
     try {
       Envelope envelope = _clientAPI.register(_crypto.getPublicKey().getEncoded());
-
+      Message msg = envelope.getMessage();
+      
       // 1st Verify HMAC
-      byte[] HMAC = _crypto.genMac(envelope.serialize(), _crypto.getSecretKey());
+      byte[] HMAC = _crypto.genMac(
+          _util.msgToByteArray( msg ), 
+          _crypto.getSecretKey());
       if (!Arrays.equals(HMAC, envelope.getHmac())){
         System.out.println("Integrity of the message not verified");
       }
@@ -54,7 +59,9 @@ public class ClientManager{
       Message msg = envelope.getMessage();
 
       // 1st Verify HMAC
-      byte[] HMAC = _crypto.genMac(envelope.serialize(), _crypto.getSecretKey());
+      byte[] HMAC = _crypto.genMac(
+          _util.msgToByteArray( msg ), 
+          _crypto.getSecretKey());
       if (!Arrays.equals(HMAC, envelope.getHmac())){
         System.out.println("Integrity of the message not verified");
       }
@@ -79,7 +86,9 @@ public class ClientManager{
       Message msg = envelope.getMessage();
 
       // 1st Verify HMAC
-      byte[] HMAC = _crypto.genMac(envelope.serialize(), _crypto.getSecretKey());
+      byte[] HMAC = _crypto.genMac(
+          _util.msgToByteArray( msg ), 
+          _crypto.getSecretKey());
       if (!Arrays.equals(HMAC, envelope.getHmac())){
         System.out.println("Integrity of the message not verified");
       }
