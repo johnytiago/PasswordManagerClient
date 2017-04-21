@@ -6,10 +6,14 @@ public class Util {
   public byte[] msgToByteArray(ws.Message msg) {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
     try {
-      outputStream.write( msg.getPublicKey() );
-      outputStream.write( msg.getUsernameHash() );
-      outputStream.write( msg.getPassword() );
-      outputStream.write( msg.getTripletHash() );
+      if ( msg.getPublicKey() != null)
+        outputStream.write( msg.getPublicKey() );
+      if ( msg.getUsernameHash() != null)
+        outputStream.write( msg.getUsernameHash() );
+      if ( msg.getPassword() != null)
+        outputStream.write( msg.getPassword() );
+      if ( msg.getTripletHash() != null)
+        outputStream.write( msg.getTripletHash() );
       outputStream.write( msg.getCounter() );
       return outputStream.toByteArray();
     } catch( Exception e) {
