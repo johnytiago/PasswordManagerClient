@@ -3,6 +3,7 @@ package ws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -16,8 +17,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="message" type="{http://ws/}message" minOccurs="0"/>
- *         &lt;element name="hmac" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
+ *         &lt;element name="message" type="{http://ws/}message"/>
+ *         &lt;element name="HMAC" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/>
+ *         &lt;element name="DHPublicKey" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,12 +31,17 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "envelope", propOrder = {
     "message",
-    "hmac"
+    "hmac",
+    "dhPublicKey"
 })
 public class Envelope {
 
+    @XmlElement(required = true)
     protected Message message;
+    @XmlElement(name = "HMAC", required = true)
     protected byte[] hmac;
+    @XmlElement(name = "DHPublicKey", required = true)
+    protected byte[] dhPublicKey;
 
     /**
      * Gets the value of the message property.
@@ -67,7 +74,7 @@ public class Envelope {
      *     possible object is
      *     byte[]
      */
-    public byte[] getHmac() {
+    public byte[] getHMAC() {
         return hmac;
     }
 
@@ -78,8 +85,30 @@ public class Envelope {
      *     allowed object is
      *     byte[]
      */
-    public void setHmac(byte[] value) {
+    public void setHMAC(byte[] value) {
         this.hmac = value;
+    }
+
+    /**
+     * Gets the value of the dhPublicKey property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getDHPublicKey() {
+        return dhPublicKey;
+    }
+
+    /**
+     * Sets the value of the dhPublicKey property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setDHPublicKey(byte[] value) {
+        this.dhPublicKey = value;
     }
 
 }
