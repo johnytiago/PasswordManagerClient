@@ -16,7 +16,8 @@ public class ClientManager{
 
   public void register(){    
     try {
-      _clientAPI.register();
+      if(!_clientAPI.register())
+        System.out.println("Error Not Registered");
       System.out.println("Success! Registered");
     } catch(Exception e){
       System.out.println("Error registring");
@@ -39,7 +40,8 @@ public class ClientManager{
 
   public void savePassword(String domain, String username, String password){
     try{
-      _clientAPI.put(domain, username, password);
+      if (!_clientAPI.put(domain, username, password))
+        System.out.println("Error Saving Password");
       System.out.println("Success! Password saved");
     } catch(Exception e){
       System.out.println("Error saving password");
