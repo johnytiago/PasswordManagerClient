@@ -24,10 +24,12 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _PasswordManagerException_QNAME = new QName("http://ws/", "PasswordManagerException");
     private final static QName _PutResponse_QNAME = new QName("http://ws/", "putResponse");
     private final static QName _GetResponse_QNAME = new QName("http://ws/", "getResponse");
     private final static QName _RegisterResponse_QNAME = new QName("http://ws/", "registerResponse");
     private final static QName _Get_QNAME = new QName("http://ws/", "get");
+    private final static QName _PubKeyAlreadyExistsException_QNAME = new QName("http://ws/", "PubKeyAlreadyExistsException");
     private final static QName _Put_QNAME = new QName("http://ws/", "put");
     private final static QName _Register_QNAME = new QName("http://ws/", "register");
 
@@ -36,6 +38,14 @@ public class ObjectFactory {
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link PasswordManagerException }
+     * 
+     */
+    public PasswordManagerException createPasswordManagerException() {
+        return new PasswordManagerException();
     }
 
     /**
@@ -71,6 +81,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PubKeyAlreadyExistsException }
+     * 
+     */
+    public PubKeyAlreadyExistsException createPubKeyAlreadyExistsException() {
+        return new PubKeyAlreadyExistsException();
+    }
+
+    /**
      * Create an instance of {@link Put }
      * 
      */
@@ -100,6 +118,15 @@ public class ObjectFactory {
      */
     public Message createMessage() {
         return new Message();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PasswordManagerException }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws/", name = "PasswordManagerException")
+    public JAXBElement<PasswordManagerException> createPasswordManagerException(PasswordManagerException value) {
+        return new JAXBElement<PasswordManagerException>(_PasswordManagerException_QNAME, PasswordManagerException.class, null, value);
     }
 
     /**
@@ -136,6 +163,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws/", name = "get")
     public JAXBElement<Get> createGet(Get value) {
         return new JAXBElement<Get>(_Get_QNAME, Get.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PubKeyAlreadyExistsException }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws/", name = "PubKeyAlreadyExistsException")
+    public JAXBElement<PubKeyAlreadyExistsException> createPubKeyAlreadyExistsException(PubKeyAlreadyExistsException value) {
+        return new JAXBElement<PubKeyAlreadyExistsException>(_PubKeyAlreadyExistsException_QNAME, PubKeyAlreadyExistsException.class, null, value);
     }
 
     /**
