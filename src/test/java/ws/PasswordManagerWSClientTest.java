@@ -1,12 +1,14 @@
 package ws;
 
 import ws.Envelope;
-import exception.*;
+import exception.PubKeyAlreadyExistsException;
 import crypto.*;
 import util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -30,20 +32,20 @@ public class PasswordManagerWSClientTest {
 
   @Test
   public void test_1_registerNewUser() {
-    Envelope envelope = _clientAPI.register();
-    Message msg = envelope.getMessage();
-
-    byte[] HMAC = _crypto.genMac(
-        _util.msgToByteArray( msg ), 
-        _crypto.getSecretKey());
-    assertArrayEquals(HMAC, envelope.getHMAC());
+    try {
+      assertTrue(_clientAPI.register());
+    } catch (PasswordManagerException_Exception | PubKeyAlreadyExistsException_Exception e) {
+      System.out.println("Failed 1");
+      e.printStackTrace();
+    }
   }
 
-  @Test(expected=PubKeyAlreadyExistsException.class)
-  public void test_2_registerUserAgain() {
+  @Test(expected=PubKeyAlreadyExistsException_Exception.class)
+  public void test_2_registerUserAgain() throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception {
     _clientAPI.register();
   }
 
+  // TODO: Update tests
   //@Test
   //public void test_3_getWhileEmpty() {
   //Envelope res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "username".getBytes());
