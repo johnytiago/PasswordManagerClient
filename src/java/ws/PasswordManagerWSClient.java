@@ -6,7 +6,6 @@ import javax.crypto.SecretKey;
 import java.security.PublicKey;
 import java.io.File;
 import java.nio.file.Files;
-import java.io.ByteArrayOutputStream;
 
 import crypto.Crypto;
 import util.Util;
@@ -86,6 +85,7 @@ public class PasswordManagerWSClient {
 
     byte[] pubKey  = _crypto.getPublicKey().getEncoded();
     byte[] salt = _crypto.getSalt();
+    // TODO: use salt like: _util.addSalt()
     byte[] domainHash = _crypto.genSign(domain.getBytes(), (PrivateKey)_crypto.getPrivateKey());
     byte[] usernameHash = _crypto.genSign(username.getBytes(), (PrivateKey)_crypto.getPrivateKey());
 
@@ -185,18 +185,4 @@ public class PasswordManagerWSClient {
     // TODO: Counter
     return verifyHMAC( envelope ); // && verifyCounter( envelope );
   }
-  private byte[] stringSalt(byte[] toSalt,byte[] salt){
-	  try{
-	  ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
-	  outputStream.write( toSalt);
-	  outputStream.write( salt );
-
-	  byte result[] = outputStream.toByteArray( );
-	  return result;
-	  } catch (Exception e){
-	      e.printStackTrace();
-	  }
-	  
 }
-
-
