@@ -129,9 +129,9 @@ public class PasswordManagerWSClient {
   public Boolean put(String domain, String username, String password) throws PasswordManagerException_Exception {
 
     byte[] pubKey  = _crypto.getPublicKey().getEncoded();
-    // TODO: Add Salt here
-    byte[] domainHash = _crypto.genSign(domain.getBytes(), (PrivateKey)_crypto.getPrivateKey());
-    byte[] usernameHash = _crypto.genSign(username.getBytes(), (PrivateKey)_crypto.getPrivateKey());
+    byte[] salt = _crypto.getSalt();
+    byte[] domainHash = _crypto.genSign(_util.addSalt(domain.getBytes(),salt), (PrivateKey)_crypto.getPrivateKey());
+    byte[] usernameHash = _crypto.genSign(_util.addSalt(username.getBytes(),salt), (PrivateKey)_crypto.getPrivateKey());
     byte[] encryptedPassword = _crypto.encrypt(password.getBytes(), _crypto.getPublicKey());
     byte[] tripletHash = _crypto.signTriplet(domainHash, usernameHash, encryptedPassword, (PrivateKey)_crypto.getPrivateKey());
 
