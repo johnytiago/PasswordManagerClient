@@ -14,7 +14,7 @@ import ws.Message;
 
 public class PasswordManagerWSClient {
 
-  private static final String PATH_TO_SERVER_DHPUBKEY = "/Users/Fabio/code/eclipse/PasswordManager/keys/server.pubKey";
+  private static final String PATH_TO_SERVER_DHPUBKEY = "../PasswordManager/keys/server.pubKey";
 
   private static PasswordManagerWS _passwordmanagerWS;
   private Crypto _crypto;
@@ -85,9 +85,8 @@ public class PasswordManagerWSClient {
 
     byte[] pubKey  = _crypto.getPublicKey().getEncoded();
     byte[] salt = _crypto.getSalt();
-    // TODO: use salt like: _util.addSalt()
-    byte[] domainHash = _crypto.genSign(domain.getBytes(), (PrivateKey)_crypto.getPrivateKey());
-    byte[] usernameHash = _crypto.genSign(username.getBytes(), (PrivateKey)_crypto.getPrivateKey());
+    byte[] domainHash = _crypto.genSign(_util.addSalt(domain.getBytes(),salt), (PrivateKey)_crypto.getPrivateKey());
+    byte[] usernameHash = _crypto.genSign(_util.addSalt(username.getBytes(),salt), (PrivateKey)_crypto.getPrivateKey());
 
     Message msg = new Message();
     msg.setPublicKey(pubKey);
