@@ -14,7 +14,7 @@ import ws.Message;
 
 public class PasswordManagerWSClient {
 
-  private static final String PATH_TO_SERVER_DHPUBKEY = "/Users/johnytiago/code/college/SEC/PasswordManager/keys/server.pubKey";
+  private static final String PATH_TO_SERVER_DHPUBKEY = "/Users/Fabio/code/eclipse/PasswordManager/keys/server.pubKey";
 
   private static PasswordManagerWS _passwordmanagerWS;
   private Crypto _crypto;
@@ -84,7 +84,8 @@ public class PasswordManagerWSClient {
   public String get(String domain, String username) throws PasswordManagerException_Exception {
 
     byte[] pubKey  = _crypto.getPublicKey().getEncoded();
-    // TODO: ADD salt here
+    byte[] salt = _crypto.getSalt();
+    // TODO: use salt like: _util.addSalt()
     byte[] domainHash = _crypto.genSign(domain.getBytes(), (PrivateKey)_crypto.getPrivateKey());
     byte[] usernameHash = _crypto.genSign(username.getBytes(), (PrivateKey)_crypto.getPrivateKey());
 
@@ -128,9 +129,9 @@ public class PasswordManagerWSClient {
   public Boolean put(String domain, String username, String password) throws PasswordManagerException_Exception {
 
     byte[] pubKey  = _crypto.getPublicKey().getEncoded();
-    // TODO: Add Salt here
-    byte[] domainHash = _crypto.genSign(domain.getBytes(), (PrivateKey)_crypto.getPrivateKey());
-    byte[] usernameHash = _crypto.genSign(username.getBytes(), (PrivateKey)_crypto.getPrivateKey());
+    byte[] salt = _crypto.getSalt();
+    byte[] domainHash = _crypto.genSign(_util.addSalt(domain.getBytes(),salt), (PrivateKey)_crypto.getPrivateKey());
+    byte[] usernameHash = _crypto.genSign(_util.addSalt(username.getBytes(),salt), (PrivateKey)_crypto.getPrivateKey());
     byte[] encryptedPassword = _crypto.encrypt(password.getBytes(), _crypto.getPublicKey());
     byte[] tripletHash = _crypto.signTriplet(domainHash, usernameHash, encryptedPassword, (PrivateKey)_crypto.getPrivateKey());
 
