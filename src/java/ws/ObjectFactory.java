@@ -29,7 +29,6 @@ public class ObjectFactory {
     private final static QName _GetResponse_QNAME = new QName("http://ws/", "getResponse");
     private final static QName _RegisterResponse_QNAME = new QName("http://ws/", "registerResponse");
     private final static QName _Get_QNAME = new QName("http://ws/", "get");
-    private final static QName _PubKeyAlreadyExistsException_QNAME = new QName("http://ws/", "PubKeyAlreadyExistsException");
     private final static QName _Put_QNAME = new QName("http://ws/", "put");
     private final static QName _Register_QNAME = new QName("http://ws/", "register");
 
@@ -78,14 +77,6 @@ public class ObjectFactory {
      */
     public Get createGet() {
         return new Get();
-    }
-
-    /**
-     * Create an instance of {@link PubKeyAlreadyExistsException }
-     * 
-     */
-    public PubKeyAlreadyExistsException createPubKeyAlreadyExistsException() {
-        return new PubKeyAlreadyExistsException();
     }
 
     /**
@@ -163,15 +154,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws/", name = "get")
     public JAXBElement<Get> createGet(Get value) {
         return new JAXBElement<Get>(_Get_QNAME, Get.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PubKeyAlreadyExistsException }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ws/", name = "PubKeyAlreadyExistsException")
-    public JAXBElement<PubKeyAlreadyExistsException> createPubKeyAlreadyExistsException(PubKeyAlreadyExistsException value) {
-        return new JAXBElement<PubKeyAlreadyExistsException>(_PubKeyAlreadyExistsException_QNAME, PubKeyAlreadyExistsException.class, null, value);
     }
 
     /**

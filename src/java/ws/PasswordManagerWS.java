@@ -70,7 +70,6 @@ public interface PasswordManagerWS {
      * @param arg0
      * @return
      *     returns ws.Envelope
-     * @throws PubKeyAlreadyExistsException_Exception
      * @throws PasswordManagerException_Exception
      */
     @WebMethod
@@ -78,13 +77,12 @@ public interface PasswordManagerWS {
     @RequestWrapper(localName = "register", targetNamespace = "http://ws/", className = "ws.Register")
     @ResponseWrapper(localName = "registerResponse", targetNamespace = "http://ws/", className = "ws.RegisterResponse")
     @Action(input = "http://ws/PasswordManagerWS/registerRequest", output = "http://ws/PasswordManagerWS/registerResponse", fault = {
-        @FaultAction(className = PasswordManagerException_Exception.class, value = "http://ws/PasswordManagerWS/register/Fault/PasswordManagerException"),
-        @FaultAction(className = PubKeyAlreadyExistsException_Exception.class, value = "http://ws/PasswordManagerWS/register/Fault/PubKeyAlreadyExistsException")
+        @FaultAction(className = PasswordManagerException_Exception.class, value = "http://ws/PasswordManagerWS/register/Fault/PasswordManagerException")
     })
     public Envelope register(
         @WebParam(name = "arg0", targetNamespace = "")
         Envelope arg0)
-        throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception
+        throws PasswordManagerException_Exception
     ;
 
 }
