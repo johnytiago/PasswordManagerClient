@@ -1,6 +1,7 @@
 package ws;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.security.PrivateKey;
 import javax.crypto.SecretKey;
 import java.security.PublicKey;
@@ -21,6 +22,7 @@ public class PasswordManagerWSClient {
   private Util _util = new Util();
   private PublicKey DHPubKeySrv;
   private SecretKey DHSecretKey;
+  private HashMap<String,Integer > counters = new HashMap<String, Integer>();
 
   public PasswordManagerWSClient() {
     connect();
@@ -87,11 +89,17 @@ public class PasswordManagerWSClient {
     byte[] salt = _crypto.getSalt();
     byte[] domainHash = _crypto.genSign(_util.addSalt(domain.getBytes(),salt), (PrivateKey)_crypto.getPrivateKey());
     byte[] usernameHash = _crypto.genSign(_util.addSalt(username.getBytes(),salt), (PrivateKey)_crypto.getPrivateKey());
-
+    int counter;
+    /*
+    if(!counters.containsKey(_crypto.publickeyToString(pubKey))){
+    	_crypto.checkCounter(counters,_crypto.publickeyToString(pubKey));
+    	}*/
+    
     Message msg = new Message();
     msg.setPublicKey(pubKey);
     msg.setDomainHash(domainHash);
     msg.setUsernameHash(usernameHash);
+    /*msg.setCounter(checkcounter);*/
 
     Envelope envelope = new Envelope();
     envelope.setMessage(msg);

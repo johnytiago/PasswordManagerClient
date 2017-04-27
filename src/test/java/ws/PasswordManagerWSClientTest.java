@@ -6,6 +6,7 @@ import crypto.*;
 import util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
@@ -44,7 +45,31 @@ public class PasswordManagerWSClientTest {
   public void test_2_registerUserAgain() throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception {
     _clientAPI.register();
   }
-
+  @Test
+  public void test_saltGet(){
+	  try{
+	  String obj = _clientAPI.get("domain", "admin");
+	  assertNotNull(obj);
+	  }catch(Exception e){
+		  
+	  }
+  }
+  //###########################
+  @Test(expected=IndexOutOfBoundsException.class)
+  public void testIndexOutOfBoundsException() {
+	  
+  }
+  //##########################
+  @Test
+  public void test_saltPut(){
+	  try{
+		  boolean test =_clientAPI.put("domain", "admin","password");
+		  assertTrue(test);
+	  }catch(Exception e){
+		  
+	  }
+	  
+  }
   // TODO: Update tests
   //@Test
   //public void test_3_getWhileEmpty() {
