@@ -1,16 +1,15 @@
 package ws;
 
-import java.util.Arrays;
-import java.security.PrivateKey;
-import javax.crypto.SecretKey;
-import java.security.PublicKey;
 import java.io.File;
 import java.nio.file.Files;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Arrays;
+
+import javax.crypto.SecretKey;
 
 import crypto.Crypto;
 import util.Util;
-import ws.Envelope;
-import ws.Message;
 
 public class PasswordManagerWSClient {
 
@@ -55,7 +54,7 @@ public class PasswordManagerWSClient {
   // ##################
   // #### REGISTER ####
   // ##################
-  public Boolean register() throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception {
+  public Boolean register() throws PasswordManagerException_Exception {
 
     Envelope envelope = new Envelope();
     Message msg = new Message();
@@ -65,16 +64,12 @@ public class PasswordManagerWSClient {
 
     // Add crypto primitives
     prepareEnvelope( envelope );
-
-    Envelope rEnvelope = _passwordmanagerWS.register(envelope);
-
-    // Do crypto evaluations
-    if( !verifyEnvelope( rEnvelope )) {
-      System.out.println("Security verifications failed... Aborting");
-      // TODO: let client know something bad happend
-      return false;
+    
+    try{
+    	_passwordmanagerWS.register(envelope);
+    }catch(PasswordManagerException_Exception pme){
+    	return false;
     }
-    System.out.println("Security verifications passed.");
     return true;
   }
 
@@ -99,15 +94,13 @@ public class PasswordManagerWSClient {
     // Add crypto primitives
     prepareEnvelope( envelope );
 
-    Envelope rEnvelope = _passwordmanagerWS.get(envelope);
-    Message rMsg = rEnvelope.getMessage();
-
-    // Do crypto evaluations
-    if( !verifyEnvelope( rEnvelope )) {
-      System.out.println("Security verifications failed... Aborting");
-      // TODO: let client know something bad happend
-      return null;
+    Envelope rEnvelope = null;
+    try{
+    	rEnvelope = _passwordmanagerWS.get(envelope);
+    }catch(PasswordManagerException_Exception pme){
+    	return null;
     }
+    Message rMsg = rEnvelope.getMessage();
 
     // Verify TripletHash matches
     byte[] tripletHash = _crypto.signTriplet(domainHash, usernameHash, rMsg.getPassword(), (PrivateKey)_crypto.getPrivateKey());
@@ -147,15 +140,13 @@ public class PasswordManagerWSClient {
     // Add Crypto primitives
     prepareEnvelope( envelope );
 
-    Envelope rEnvelope = _passwordmanagerWS.put(envelope);
-
-    // Do crypto evaluations
-    if( !verifyEnvelope( rEnvelope )) {
-      System.out.println("Security verifications failed... Aborting");
-      // TODO: let client know something bad happend
-      return false;
+    Envelope rEnvelope = null;
+    try{
+    	_passwordmanagerWS.put(envelope);
+    }catch(PasswordManagerException_Exception pme){
+    	return false;
     }
-    System.out.println("Security verifications passed.");
+
     return true;
   }
 

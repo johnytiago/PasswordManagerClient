@@ -1,19 +1,14 @@
 package ws;
 
-import ws.Envelope;
-import exception.PubKeyAlreadyExistsException;
-import crypto.*;
-import util.*;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
+import crypto.Crypto;
+import util.Util;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PasswordManagerWSClientTest {
@@ -34,14 +29,14 @@ public class PasswordManagerWSClientTest {
   public void test_1_registerNewUser() {
     try {
       assertTrue(_clientAPI.register());
-    } catch (PasswordManagerException_Exception | PubKeyAlreadyExistsException_Exception e) {
+    } catch (PasswordManagerException_Exception e) {
       System.out.println("Failed 1");
       e.printStackTrace();
     }
   }
 
-  @Test(expected=PubKeyAlreadyExistsException_Exception.class)
-  public void test_2_registerUserAgain() throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception {
+  @Test(expected=PasswordManagerException_Exception.class)
+  public void test_2_registerUserAgain() throws PasswordManagerException_Exception {
     _clientAPI.register();
   }
 
