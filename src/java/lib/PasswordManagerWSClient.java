@@ -1,4 +1,4 @@
-package ws;
+package lib;
 
 import java.util.Arrays;
 import java.security.PrivateKey;
@@ -9,14 +9,13 @@ import java.nio.file.Files;
 
 import crypto.Crypto;
 import util.Util;
-import ws.Envelope;
-import ws.Message;
+import ws.*;
 
 public class PasswordManagerWSClient {
 
   private static final String PATH_TO_SERVER_DHPUBKEY = "../PasswordManager/keys/server.pubKey";
 
-  private static PasswordManagerWS _passwordmanagerWS;
+  private static ws.PasswordManagerWS _passwordmanagerWS;
   private Crypto _crypto;
   private Util _util = new Util();
   private PublicKey DHPubKeySrv;

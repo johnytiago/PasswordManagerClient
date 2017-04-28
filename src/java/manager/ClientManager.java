@@ -1,6 +1,6 @@
 package manager;
 
-import ws.PasswordManagerWSClient;
+import lib.PasswordManagerWSClient;
 
 public class ClientManager{
 

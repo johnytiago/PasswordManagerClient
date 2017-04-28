@@ -2,6 +2,7 @@ package ws;
 
 import ws.Envelope;
 import exception.PubKeyAlreadyExistsException;
+import lib.PasswordManagerWSClient;
 import crypto.*;
 import util.*;
 
