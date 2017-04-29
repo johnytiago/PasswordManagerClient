@@ -21,16 +21,4 @@ public class Util {
       return null;
     }
   }
-
-  public byte[] addSalt(byte[] data, byte[] salt){
-    try{
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
-      outputStream.write( data );
-      outputStream.write( salt );
-      return outputStream.toByteArray();
-    } catch (Exception e){
-      e.printStackTrace();
-      return null;
-    }
-  }
 }
