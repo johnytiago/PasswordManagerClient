@@ -177,7 +177,7 @@ public class PasswordManagerWSClient {
   }
   private boolean verifyCounter(Envelope envelope){
 	  int counter = envelope.getMessage().getCounter();
-	  byte [] pub = envelope.getDHPublicKey(); //Not sure if it is DHkey that we want to check here
+	  byte [] pub = envelope.getMessage().getPublicKey(); //Not sure if it is DHkey that we want to check here
 	  return checkCounter(_util.publickeyToString(pub),counter);
   }
 
@@ -194,7 +194,7 @@ public class PasswordManagerWSClient {
   private void prepareEnvelope( Envelope envelope ) {
     envelope.setDHPublicKey( _crypto.getDHPublicKey().getEncoded() );
     addHMAC( envelope );
-    addCounter(_util.publickeyToString(_crypto.getDHPublicKey().getEncoded()),envelope);//not sure if this is the pubkey to use
+    addCounter(_util.publickeyToString(_crypto.getPublicKey().getEncoded()),envelope);//not sure if this is the pubkey to use
     return;
   }
 
