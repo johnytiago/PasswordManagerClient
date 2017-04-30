@@ -51,14 +51,14 @@ public class Security {
 	generateDH( envelope, pubKeySrv );
     envelope.getMessage().setPublicKey( _crypto.getPublicKey().getEncoded() ); 
     envelope.setDHPublicKey( _crypto.getDHPublicKey().getEncoded() );
-    addHMAC( envelope, pubKeySrv );
     envelope.getMessage().setCounter(_crypto.addCounter(pubKeySrv));
+    // Must be the last to add to envelope
+    addHMAC( envelope, pubKeySrv );
     return;
   }
 
   public boolean verifyEnvelope( Envelope envelope ) {
-    return verifyHMAC( envelope ) &&
-    	   _crypto.verifyCounter( envelope.getDHPublicKey(), envelope.getMessage().getCounter() );
+    return verifyHMAC( envelope ) && _crypto.verifyCounter( envelope.getDHPublicKey(), envelope.getMessage().getCounter() );
   }
   
   private void generateDH( Envelope envelope, byte[] pubKeySrv ){
