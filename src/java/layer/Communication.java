@@ -76,6 +76,7 @@ public class Communication {
 			Method register = _passwordmanagerWS.getClass().getMethod("register", envelopeClass);
 			send(register, envelope);
 			return true;
+			//TODO handle security exception
 		} catch( NoSuchMethodException e){
 			System.out.println("[Communication] Error calling put method");
 			return false;

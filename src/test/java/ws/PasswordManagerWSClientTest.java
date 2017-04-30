@@ -41,10 +41,10 @@ public class PasswordManagerWSClientTest {
     }
   }
 
-  @Test(expected=PubKeyAlreadyExistsException_Exception.class)
-  public void test_2_registerUserAgain() throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception {
-    _clientAPI.register();
-  }
+  //@Test(expected=PubKeyAlreadyExistsException_Exception.class)
+  //public void test_2_registerUserAgain() throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception {
+  //  _clientAPI.register();
+  //}
 
   // TODO: Update tests
   //@Test

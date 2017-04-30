@@ -52,13 +52,13 @@ public class Security {
     envelope.getMessage().setPublicKey( _crypto.getPublicKey().getEncoded() ); 
     envelope.setDHPublicKey( _crypto.getDHPublicKey().getEncoded() );
     addHMAC( envelope, pubKeySrv );
-    // TODO: counter
+    envelope.getMessage().setCounter(_crypto.addCounter(pubKeySrv));
     return;
   }
 
   public boolean verifyEnvelope( Envelope envelope ) {
-    // TODO: Counter
-    return verifyHMAC( envelope ); // && verifyCounter( envelope );
+    return verifyHMAC( envelope ) &&
+    	   _crypto.verifyCounter( envelope.getDHPublicKey(), envelope.getMessage().getCounter() );
   }
   
   private void generateDH( Envelope envelope, byte[] pubKeySrv ){
