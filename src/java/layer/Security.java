@@ -17,6 +17,7 @@ public class Security {
   private Crypto _crypto;
   private Util _util = new Util();
   private SecretKeyStore dhKeyStore = new SecretKeyStore();
+  private boolean DEBUG = Boolean.valueOf((System.getenv("DEBUG")));
 
   public Security (Crypto crypto){
     this._crypto = crypto;
@@ -58,6 +59,10 @@ public class Security {
   }
 
   public boolean verifyEnvelope( Envelope envelope ) {
+	if( DEBUG ) {
+		System.out.println("[DEBUG] MAC verification passed? " + verifyHMAC( envelope ));
+		System.out.println("[DEBUG] Counter verification passed? " + _crypto.verifyCounter( envelope.getDHPublicKey(), envelope.getMessage().getCounter() ));
+	}
     return verifyHMAC( envelope ) && _crypto.verifyCounter( envelope.getDHPublicKey(), envelope.getMessage().getCounter() );
   }
   
