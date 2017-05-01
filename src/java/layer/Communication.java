@@ -2,11 +2,15 @@ package layer;
 
 import java.io.File;
 import java.nio.file.Files;
-
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import crypto.Crypto;
+import exception.SecurityVerificationException;
 import ws.*;
 import util.PublicKeyStore;
 
@@ -17,7 +21,9 @@ public class Communication {
 	private Security securityLayer;
 	private PublicKeyStore dhPubKeyStore = new PublicKeyStore();
 	private Class<?>[] envelopeClass = new Class[]{Envelope.class};
-
+	private HashMap<String, PasswordManagerWS> replicas= new HashMap<String, PasswordManagerWS>();
+	private String PORT = System.getenv("PORT");
+	private int NUM_REPLICAS = Integer.valueOf(System.getenv("NUM_REPLICAS"));
 
 	public Communication (Crypto crypto){
 	    securityLayer = new Security(crypto);
@@ -56,18 +62,22 @@ public class Communication {
 	}
 	  
 	public void connect() {
-		PasswordManagerWSImplService pmWSImplService = new PasswordManagerWSImplService();
-		_passwordmanagerWS = pmWSImplService.getPasswordManagerWSImplPort();
+		int port = Integer.valueOf(PORT);
+		int lastPort = port + NUM_REPLICAS - 1;
 		
-		//System.out.println("DEBUGG" + pmWSImplService.getWSDLDocumentLocation().toString());
-		
-		//for( Iterator<QName> qn = pmWSImplService.getPorts(); qn.hasNext(); ){
-		//	QName q = qn.next();
-		//	System.out.println(q.getNamespaceURI());
-		//}
-		
-		System.out.println("Connected to PasswordManagerServer.");
-		System.out.println("Found service running at: " + pmWSImplService.getWSDLDocumentLocation().toString());
+		for( ; port <= lastPort ; port++ ) {
+			PasswordManagerWSImplService pmWSImplService = null;
+			try {
+				URL url = new URL("http://localhost:"+port+"/WS/PasswordManager?wsdl");
+				pmWSImplService = new PasswordManagerWSImplService(url);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			replicas.put("server"+port, pmWSImplService.getPasswordManagerWSImplPort());
+			// Store just to getClass later on. No real use;
+			_passwordmanagerWS = pmWSImplService.getPasswordManagerWSImplPort();
+			System.out.println("Connected to replica: " + pmWSImplService.getWSDLDocumentLocation().toString());
+		}
 	}
 	
 	// ## REGISTER ##
@@ -118,36 +128,32 @@ public class Communication {
 		}
 	}
 
-	public Envelope send( Method method, Envelope envelope ) {
+	public Envelope send( Method method, Envelope envelope ) throws SecurityVerificationException {
 	  
-		// Foreach _passwordmanagerWS.
-	    // TODO: get name of server to talk to
-		// TODO: round robin servers and talk to each on of them.
-	    // TODO: use pubKey structure to fetch pubkey and pass to prepare
+		for (Entry<String, PasswordManagerWS> pmWS : replicas.entrySet()) {
+			
+			String serverName = pmWS.getKey();
+			PasswordManagerWS server = pmWS.getValue();
+			byte[] pubkey = dhPubKeyStore.get(serverName);
+			securityLayer.prepareEnvelope( envelope, pubkey);
+
+			try {
+				Envelope rEnvelope = (Envelope) method.invoke(server, envelope);
+
+				if( !securityLayer.verifyEnvelope( rEnvelope )) {
+					System.out.println("Security verifications failed... Aborting");
+					throw new SecurityVerificationException();
+				}
+
+				System.out.println("Security verifications passed.");
+				return rEnvelope;
+
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 		
-		// Server is dummy
-		byte[] pubkey = dhPubKeyStore.get("server");
-	    securityLayer.prepareEnvelope( envelope, pubkey);
-	    
-	    try {
-	    	Envelope rEnvelope = (Envelope) method.invoke(_passwordmanagerWS, envelope);
-
-	    	// Do crypto evaluations
-	    	if( !securityLayer.verifyEnvelope( rEnvelope )) {
-	    		System.out.println("Security verifications failed... Aborting");
-	    		// TODO: let calling method know if it was a security fail (Exception)
-	    		return null;
-	    	}
-
-	    	System.out.println("Security verifications passed.");
-	    	return rEnvelope;
-
-	    } catch( IllegalAccessException e){
-	    	e.printStackTrace();
-	    	return null;
-	    } catch (IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		} 
+		return null;
 	}
 }
