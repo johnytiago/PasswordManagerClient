@@ -4,6 +4,7 @@ import crypto.Crypto;
 import ws.*;
 import layer.Security;
 import layer.Communication;
+import layer.Processer;
 
 import java.security.PrivateKey;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ public class PasswordManagerWSClient {
   private Crypto _crypto;
   private Security securityLayer;
   private Communication communicationLayer;
+  private Processer processer;
 
   public PasswordManagerWSClient() {
     _crypto = new Crypto();
@@ -63,8 +65,10 @@ public class PasswordManagerWSClient {
       return null;
     }
     System.out.println("Security verifications passed.");
-
     byte[] pw = _crypto.decrypt(msg.getPassword(), _crypto.getPrivateKey());
+    int v = 4;// should be returned from the Envelope
+    processer.NumberMatch(v,pw);
+    
     return new String(pw);
   }
 
