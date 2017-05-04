@@ -34,7 +34,7 @@ public class PasswordManagerWSClient {
 	  Envelope envelope = new Envelope();
 	  Message msg = new Message();
 	  envelope.setMessage(msg);
-
+	  //TODO:will need to initialize the carrier somewhere here
 	  return communicationLayer.register(envelope);
   }
 
@@ -67,9 +67,8 @@ public class PasswordManagerWSClient {
     System.out.println("Security verifications passed.");
     byte[] pw = _crypto.decrypt(msg.getPassword(), _crypto.getPrivateKey());
     int v = 4;// should be returned from the Envelope
-    processer.NumberMatch(v,pw);
     
-    return new String(pw);
+    return new String (processer.NumberMatch(msg.getCarrier(),pw));
   }
 
   // ##################
@@ -90,8 +89,9 @@ public class PasswordManagerWSClient {
     msg.setUsernameHash(usernameHash);
     msg.setTripletHash(tripletHash);
     msg.setPassword(encryptedPassword);
+    msg.setCarrier(processer.getWts());
     envelope.setMessage(msg);
-
+    //TODO: missing here check for all acks maybe?
     return communicationLayer.put(envelope);
   }
 }

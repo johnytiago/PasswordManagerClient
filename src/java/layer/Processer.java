@@ -2,7 +2,7 @@ package layer;
 
 import java.util.Collections;
 import java.util.HashMap;
-import ws.Envelope;
+
 
 public class Processer{
 	private HashMap<Integer, byte[]> readlist= new HashMap<Integer, byte[]>();
@@ -10,6 +10,12 @@ public class Processer{
 	private int N = Integer.valueOf(System.getenv("NUM_REPLICAS"));
 	private int fault=Integer.valueOf(System.getenv("FAULT"));;// fault is the f of the equations on consensus
 	private int writeAck;
+	private int wts;
+	
+	public int getWts(){
+		wts=wts+1;
+		return wts;
+	}
 	
 	//################### Checks read values################
 	public byte[] Checker(){
@@ -22,7 +28,7 @@ public class Processer{
 	
 		public byte[] NumberMatch(int ts, byte[]password){
 			readlist.put(ts, password);
-			if(readlist.size()>(N+2)/2){ //falta f nesta conta
+			if(readlist.size()>(N+2*fault)/2){
 				Checker();
 			}
 			return null;
