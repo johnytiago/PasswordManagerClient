@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.XmlType;
     "domainHash",
     "tripletHash",
     "counter",
-    "publicKey"
+    "publicKey",
+    "carrier"  // should check if there is anything communication wise that needs to be done to implement this
 })
 public class Message {
 
@@ -47,6 +48,7 @@ public class Message {
     protected byte[] tripletHash;
     protected int counter;
     protected byte[] publicKey;
+    protected int  carrier;
 
     /**
      * Gets the value of the password property.
@@ -143,7 +145,17 @@ public class Message {
     public int getCounter() {
         return counter;
     }
+    
+    /**
+     * Gets the value of the carrier property.
+     * 
+     */
+    public int getCarrier() {
+        return carrier;
+    }
+    
 
+    
     /**
      * Sets the value of the counter property.
      * 
@@ -151,7 +163,15 @@ public class Message {
     public void setCounter(int value) {
         this.counter = value;
     }
-
+    
+    /**
+     * Sets the value of the counter property.
+     * 
+     */
+    public void setCarrier(int value) {
+        this.carrier = value;
+    }
+    
     /**
      * Gets the value of the publicKey property.
      * 
