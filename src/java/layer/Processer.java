@@ -9,15 +9,8 @@ public class Processer{
 	
 	private int N = Integer.valueOf(System.getenv("NUM_REPLICAS"));
 	private int fault=Integer.valueOf(System.getenv("FAULT"));;// fault is the f of the equations on consensus
-
-	
-	
 	private int writeAck;
 	
-	//######################################################
-	public void setF(int f){
-		fault=f;
-	}
 	//################### Checks read values################
 	public byte[] Checker(){
 		
