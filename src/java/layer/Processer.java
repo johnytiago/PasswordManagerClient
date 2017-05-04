@@ -6,8 +6,18 @@ import ws.Envelope;
 
 public class Processer{
 	private HashMap<Integer, byte[]> readlist= new HashMap<Integer, byte[]>();
-	private int N = 10;//numero de replicas
 	
+	private int N = Integer.valueOf(System.getenv("NUM_REPLICAS"));
+	private int fault=Integer.valueOf(System.getenv("FAULT"));;// fault is the f of the equations on consensus
+
+	
+	
+	private int writeAck;
+	
+	//######################################################
+	public void setF(int f){
+		fault=f;
+	}
 	//################### Checks read values################
 	public byte[] Checker(){
 		
@@ -26,6 +36,11 @@ public class Processer{
 			
 		}
 	//#######################################################
-		
+		public void writeCheck(){
+			if ((N+fault)/2 == writeAck){
+				//TODO send the writeReturn back to the client
+				writeAck=0;
+			}
+		}
 	
 }
