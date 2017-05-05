@@ -41,6 +41,16 @@ public class Security {
     return Arrays.equals(HMAC, envelope.getHMAC());
   }
 
+  public boolean verifySignature( Envelope envelope ) {
+    byte[] msg = _util.singnableByteArray( envelope.getMessage() );
+    return _crypto.verSign(msg, _crypto.retrievePubKey(envelope.getMessage().getPublicKey()), envelope.getMessage().getSignature());
+  }
+
+  public void signMessage(Envelope envelope){
+    byte[] msg = _util.singnableByteArray(envelope.getMessage());
+    envelope.getMessage().setSignature(_crypto.genSign( msg , (PrivateKey)_crypto.getPrivateKey() ));
+  }
+
   private void addHMAC( Envelope envelope, byte[] dhPubKeySrv ) {
     SecretKey DHSecretKey = dhKeyStore.get( dhPubKeySrv );
     byte[] HMAC = _crypto.genMac( _util.msgToByteArray( envelope.getMessage() ), DHSecretKey );
@@ -53,17 +63,13 @@ public class Security {
     envelope.getMessage().setPublicKey( _crypto.getPublicKey().getEncoded() ); 
     envelope.setDHPublicKey( _crypto.getDHPublicKey().getEncoded() );
     envelope.getMessage().setCounter(_crypto.addCounter(pubKeySrv));
-    //byte[] msg = _util.singnableByteArray(envelope.getMessage());
-    //envelope.getMessage().setSignature(_crypto.genSign( msg , (PrivateKey)_crypto.getPrivateKey() ));
+
     // Must be the last to add to envelope
     addHMAC( envelope, pubKeySrv );
     return;
   }
 
   public boolean verifyEnvelope( Envelope envelope ) {
-    //byte[] msg = _util.singnableByteArray( envelope.getMessage() );
-    //Boolean sign = _crypto.verSign(msg, _crypto.retrievePubKey(envelope.getMessage().getPublicKey()), envelope.getMessage().getSignature());
-
     if( DEBUG ) {
       System.out.println("[DEBUG] MAC verification passed? " + verifyHMAC( envelope ));
       System.out.println("[DEBUG] Counter verification passed? " + _crypto.verifyCounter( envelope.getDHPublicKey(), envelope.getMessage().getCounter() ));

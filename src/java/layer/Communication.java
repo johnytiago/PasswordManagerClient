@@ -2,6 +2,9 @@ package layer;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import crypto.Crypto;
+import exception.FailedToGetQuorumException;
 import exception.SecurityVerificationException;
 import ws.*;
 import util.PublicKeyStore;
@@ -24,6 +28,8 @@ public class Communication {
 	private HashMap<String, PasswordManagerWS> replicas= new HashMap<String, PasswordManagerWS>();
 	private String PORT = System.getenv("PORT");
 	private int NUM_REPLICAS = Integer.valueOf(System.getenv("NUM_REPLICAS"));
+	private int NUM_FAULTS = Integer.valueOf(System.getenv("NUM_FAULTS"));
+	private int wts = 0;
 
 	public Communication (Crypto crypto){
 	    securityLayer = new Security(crypto);
@@ -84,7 +90,7 @@ public class Communication {
 	public Boolean register(Envelope envelope) throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception {
 	    try {
 			Method register = _passwordmanagerWS.getClass().getMethod("register", envelopeClass);
-			send(register, envelope);
+			broadcast(register, envelope);
 			return true;
 			//TODO handle security exception
 		} catch( NoSuchMethodException e){
@@ -101,7 +107,7 @@ public class Communication {
 	public Envelope get(Envelope envelope) throws PasswordManagerException_Exception {
 		try {
 			Method get = _passwordmanagerWS.getClass().getMethod("get", envelopeClass);
-			return send(get, envelope);
+			return broadcast(get, envelope);
 		} catch( NoSuchMethodException e){
 			System.out.println("[Communication] Error calling put method");
 			return null;
@@ -116,7 +122,9 @@ public class Communication {
 	public Boolean put(Envelope envelope) throws PasswordManagerException_Exception {
 		try {
 			Method put = _passwordmanagerWS.getClass().getMethod("put", envelopeClass);
-			send(put, envelope);
+			wts = wts + 1;
+			securityLayer.signMessage(envelope);
+			broadcast(put, envelope);
 			return true;
 		} catch( NoSuchMethodException e){
 			System.out.println("[Communication] Error calling put method");
@@ -128,32 +136,70 @@ public class Communication {
 		}
 	}
 
-	public Envelope send( Method method, Envelope envelope ) throws SecurityVerificationException {
-	  
-		for (Entry<String, PasswordManagerWS> pmWS : replicas.entrySet()) {
-			
-			String serverName = pmWS.getKey();
-			PasswordManagerWS server = pmWS.getValue();
+	public Envelope send( Method method, Envelope envelope, PasswordManagerWS server, String serverName ) 
+			throws SecurityVerificationException {		
+		try {
+
 			byte[] pubkey = dhPubKeyStore.get(serverName);
 			securityLayer.prepareEnvelope( envelope, pubkey);
+			
+			Envelope rEnvelope = (Envelope) method.invoke(server, envelope);
 
+			if( !securityLayer.verifyEnvelope( rEnvelope )) {
+				System.out.println("Security verifications failed for " + serverName);
+				throw new SecurityVerificationException();
+			}
+
+			System.out.println("Security verifications passed.");
+			return rEnvelope;
+
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Envelope broadcast(Method method, Envelope envelope) throws FailedToGetQuorumException {
+		ArrayList<Envelope> readList = new ArrayList<Envelope>();
+		int quorum = (NUM_REPLICAS+NUM_FAULTS)/2;
+		Envelope rEnvelope = null;
+		
+		for (Entry<String, PasswordManagerWS> pmWS : replicas.entrySet()) {
+			String serverName = pmWS.getKey();
+			PasswordManagerWS server = pmWS.getValue();
 			try {
-				Envelope rEnvelope = (Envelope) method.invoke(server, envelope);
-
-				if( !securityLayer.verifyEnvelope( rEnvelope )) {
-					System.out.println("Security verifications failed... Aborting");
-					throw new SecurityVerificationException();
-				}
-
-				System.out.println("Security verifications passed.");
-				return rEnvelope;
-
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-				return null;
+				rEnvelope = send(method, envelope, server, serverName);
+				
+				// verify integrity if only it's a read
+				if (method.getName().equals("get"))
+					if( !securityLayer.verifySignature(rEnvelope) )
+						continue;
+				
+				readList.add(rEnvelope);
+				if( readList.size() > quorum)
+					break;
+			} catch(Exception e){
+				// verifications failed. not valid
+				continue;
 			}
 		}
 		
-		return null;
+		// broadcast ended without quorum
+		if( !(readList.size() > quorum) )
+			throw new FailedToGetQuorumException();
+
+		// only sort for read method
+		if (method.getName().equals("get")){
+			Collections.sort(readList, new Comparator<Envelope>() {
+				public int compare(Envelope e1, Envelope e2) {
+					return e1.getMessage().getWts() - e2.getMessage().getWts();
+				}
+			});
+			
+			// pick the most recent one
+			rEnvelope = readList.get(0);
+		}
+		
+		return rEnvelope;
 	}
 }
