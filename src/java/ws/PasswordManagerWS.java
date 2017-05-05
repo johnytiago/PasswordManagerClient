@@ -70,8 +70,8 @@ public interface PasswordManagerWS {
      * @param arg0
      * @return
      *     returns ws.Envelope
-     * @throws PubKeyAlreadyExistsException_Exception
      * @throws PasswordManagerException_Exception
+     * @throws PubKeyAlreadyExistsException_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")

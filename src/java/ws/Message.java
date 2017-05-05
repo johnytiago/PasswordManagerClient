@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="tripletHash" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *         &lt;element name="counter" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="publicKey" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
+ *         &lt;element name="wts" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="rid" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,7 +39,9 @@ import javax.xml.bind.annotation.XmlType;
     "domainHash",
     "tripletHash",
     "counter",
-    "publicKey"
+    "publicKey",
+    "wts",
+    "rid"
 })
 public class Message {
 
@@ -47,6 +51,8 @@ public class Message {
     protected byte[] tripletHash;
     protected int counter;
     protected byte[] publicKey;
+    protected int wts;
+    protected int rid;
 
     /**
      * Gets the value of the password property.
@@ -172,6 +178,38 @@ public class Message {
      */
     public void setPublicKey(byte[] value) {
         this.publicKey = value;
+    }
+
+    /**
+     * Gets the value of the wts property.
+     * 
+     */
+    public int getWts() {
+        return wts;
+    }
+
+    /**
+     * Sets the value of the wts property.
+     * 
+     */
+    public void setWts(int value) {
+        this.wts = value;
+    }
+
+    /**
+     * Gets the value of the rid property.
+     * 
+     */
+    public int getRid() {
+        return rid;
+    }
+
+    /**
+     * Sets the value of the rid property.
+     * 
+     */
+    public void setRid(int value) {
+        this.rid = value;
     }
 
 }

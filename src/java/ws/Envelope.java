@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="message" type="{http://ws/}message"/>
  *         &lt;element name="HMAC" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/>
  *         &lt;element name="DHPublicKey" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/>
+ *         &lt;element name="Signature" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -32,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "envelope", propOrder = {
     "message",
     "hmac",
-    "dhPublicKey"
+    "dhPublicKey",
+    "signature"
 })
 public class Envelope {
 
@@ -42,6 +44,8 @@ public class Envelope {
     protected byte[] hmac;
     @XmlElement(name = "DHPublicKey", required = true)
     protected byte[] dhPublicKey;
+    @XmlElement(name = "Signature", required = true)
+    protected byte[] signature;
 
     /**
      * Gets the value of the message property.
@@ -109,6 +113,28 @@ public class Envelope {
      */
     public void setDHPublicKey(byte[] value) {
         this.dhPublicKey = value;
+    }
+
+    /**
+     * Gets the value of the signature property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getSignature() {
+        return signature;
+    }
+
+    /**
+     * Sets the value of the signature property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setSignature(byte[] value) {
+        this.signature = value;
     }
 
 }
