@@ -54,7 +54,7 @@ public class Security {
     envelope.setDHPublicKey( _crypto.getDHPublicKey().getEncoded() );
     envelope.getMessage().setCounter(_crypto.addCounter(pubKeySrv));
     byte[] msg = _util.singnableByteArray(envelope.getMessage());
-    envelope.setSignature(_crypto.genSign( msg , (PrivateKey)_crypto.getPrivateKey() ));
+    envelope.getMessage().setSignature(_crypto.genSign( msg , (PrivateKey)_crypto.getPrivateKey() ));
     // Must be the last to add to envelope
     addHMAC( envelope, pubKeySrv );
     return;
@@ -62,7 +62,7 @@ public class Security {
 
   public boolean verifyEnvelope( Envelope envelope ) {
     byte[] msg = _util.singnableByteArray( envelope.getMessage() );
-    Boolean sign = _crypto.verSign(msg, _crypto.retrievePubKey(envelope.getMessage().getPublicKey()), envelope.getSignature());
+    Boolean sign = _crypto.verSign(msg, _crypto.retrievePubKey(envelope.getMessage().getPublicKey()), envelope.getMessage().getSignature());
 
     if( DEBUG ) {
       System.out.println("[DEBUG] MAC verification passed? " + verifyHMAC( envelope ));
