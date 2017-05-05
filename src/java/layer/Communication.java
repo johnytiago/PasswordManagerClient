@@ -161,7 +161,7 @@ public class Communication {
 
 	public Envelope broadcast(Method method, Envelope envelope) throws FailedToGetQuorumException {
 		ArrayList<Envelope> readList = new ArrayList<Envelope>();
-		int quorum = (NUM_REPLICAS+NUM_FAULTS)/2;
+		double quorum = Math.ceil((NUM_REPLICAS+NUM_FAULTS)/2);
 		Envelope rEnvelope = null;
 		
 		for (Entry<String, PasswordManagerWS> pmWS : replicas.entrySet()) {
