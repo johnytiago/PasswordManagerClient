@@ -36,10 +36,25 @@ public class PasswordManagerWSClientTest {
     try {
       assertTrue(_clientAPI.register());
     } catch (PasswordManagerException_Exception | PubKeyAlreadyExistsException_Exception e) {
-      System.out.println("Failed 1");
       e.printStackTrace();
     }
   }
+
+  @Test
+  public void test_2_putSuccess() throws PasswordManagerException_Exception {
+    try {
+      boolean res = _clientAPI.put("domain", "username", "password");
+      assertEquals(true, res);
+    } catch (PasswordManagerException_Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  //@Test
+  //public void test_3_getPasswordSuccess() throws PasswordManagerException_Exception {
+    //String res = _clientAPI.get("domain", "username");
+    //assertEquals("password", res);
+  //}
 
   //@Test(expected=PubKeyAlreadyExistsException_Exception.class)
   //public void test_2_registerUserAgain() throws PasswordManagerException_Exception, PubKeyAlreadyExistsException_Exception {
@@ -59,11 +74,6 @@ public class PasswordManagerWSClientTest {
   ////assertEquals(message.PasswordManagerMessages.PUBKEY_NOT_FOUND, res);
   //}
 
-  //@Test
-  //public void test_5_putSuccess() {
-  ////Envelope res = _clientAPI.put("pubKey".getBytes(), "domain".getBytes(), "username".getBytes(), "password".getBytes());
-  ////assertEquals("", res);
-  //}
 
   //@Test
   //public void test_6_putTwice() {
@@ -86,11 +96,5 @@ public class PasswordManagerWSClientTest {
   //public void test_7_getWrongUsername() {
   //Envelope res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "wrongUsername".getBytes());
   ////assertEquals(message.PasswordManagerMessages.PASSWORD_NOT_FOUND.getBytes(), res);
-  //}
-
-  //@Test
-  //public void test_8_getPasswordSuccess() {
-  //Envelope res = _clientAPI.get("pubKey".getBytes(), "domain".getBytes(), "username".getBytes());
-  ////assertEquals("password".getBytes(), res);
   //}
 }

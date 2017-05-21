@@ -104,7 +104,7 @@ public class Communication {
 	}
 	
 	// ## GET ##
-	public Envelope get(Envelope envelope) throws PasswordManagerException_Exception {
+	public Envelope get(Envelope envelope) {
 		try {
 			Method get = _passwordmanagerWS.getClass().getMethod("get", envelopeClass);
 			return broadcast(get, envelope);
@@ -144,7 +144,7 @@ public class Communication {
 			securityLayer.prepareEnvelope( envelope, pubkey);
 			
 			Envelope rEnvelope = (Envelope) method.invoke(server, envelope);
-
+		
 			if( !securityLayer.verifyEnvelope( rEnvelope )) {
 				System.out.println("Security verifications failed for " + serverName);
 				throw new SecurityVerificationException();
@@ -154,7 +154,7 @@ public class Communication {
 			return rEnvelope;
 
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			System.out.println("Remote exception " + e.getMessage());
 			return null;
 		}
 	}
@@ -169,13 +169,16 @@ public class Communication {
 			PasswordManagerWS server = pmWS.getValue();
 			try {
 				rEnvelope = send(method, envelope, server, serverName);
-				
+				System.out.println("[DEBUG] Server " + serverName + " responded");
+
 				// verify integrity if only it's a read
 				if (method.getName().equals("get"))
 					if( !securityLayer.verifySignature(rEnvelope) )
 						continue;
 				
 				readList.add(rEnvelope);
+				System.out.println("[DEBUG] READLIST SIZE " + readList.size());
+
 				if( readList.size() > quorum)
 					break;
 			} catch(Exception e){
@@ -185,6 +188,7 @@ public class Communication {
 		}
 		
 		// broadcast ended without quorum
+		System.out.println("[DEBUG] READLIST SIZE " + readList.size() + " and the quorum "+ quorum );
 		if( !(readList.size() > quorum) )
 			throw new FailedToGetQuorumException();
 

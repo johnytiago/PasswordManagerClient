@@ -33,6 +33,7 @@ public class PasswordManagerWSClient {
 	  Message msg = new Message();
 	  envelope.setMessage(msg);
 
+      System.out.println("[DEBUG] Running register command");
 	  return communicationLayer.register(envelope);
   }
 
@@ -52,6 +53,7 @@ public class PasswordManagerWSClient {
     msg.setUsernameHash(usernameHash);
     envelope.setMessage(msg);
 
+    System.out.println("[DEBUG] Running get command");
 	Envelope rEnvelope = communicationLayer.get(envelope);
 	Message rMsg = rEnvelope.getMessage();
 
@@ -87,7 +89,8 @@ public class PasswordManagerWSClient {
     msg.setTripletHash(tripletHash);
     msg.setPassword(encryptedPassword);
     envelope.setMessage(msg);
-
+    
+    System.out.println("[DEBUG] Running put command");
     return communicationLayer.put(envelope);
   }
 }
